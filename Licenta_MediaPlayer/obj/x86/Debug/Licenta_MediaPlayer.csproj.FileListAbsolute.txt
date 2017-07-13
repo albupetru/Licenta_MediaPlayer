@@ -1,0 +1,13 @@
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\x86\Debug\Licenta_MediaPlayer.exe.config
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\x86\Debug\Licenta_MediaPlayer.exe
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\x86\Debug\Licenta_MediaPlayer.pdb
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\x86\Debug\Vlc.DotNet.Core.dll
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\x86\Debug\Vlc.DotNet.Core.Interops.dll
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\x86\Debug\Vlc.DotNet.Forms.dll
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\x86\Debug\Vlc.DotNet.Wpf.dll
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\x86\Debug\Licenta_MediaPlayer.MainWindow.resources
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\x86\Debug\Licenta_MediaPlayer.Properties.Resources.resources
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\x86\Debug\Licenta_MediaPlayer.csproj.GenerateResource.Cache
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\x86\Debug\Licenta_MediaPlayer.exe
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\x86\Debug\Licenta_MediaPlayer.pdb
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\x86\Debug\Licenta_MediaPlayer.csprojResolveAssemblyReference.cache
