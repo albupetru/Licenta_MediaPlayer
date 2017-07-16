@@ -7,6 +7,9 @@ namespace Licenta_MediaPlayer
 {
     public partial class MainWindow : Form
     {
+        bool mouseOnVolumeTrackbar;
+        int soundVolume = 100;
+        bool muted = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -38,13 +41,63 @@ namespace Licenta_MediaPlayer
             
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button_play_Click(object sender, EventArgs e)
         {
             myVlcControl.Play(new Uri("http://download.blender.org/peach/bigbuckbunny_movies/big_buck_bunny_480p_surround-fix.avi"));
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void button_volume_MouseEnter(object sender, EventArgs e)
         {
+            trackBarVolume.Show();
+            mouseOnVolumeTrackbar = true;
+        }
+
+        private void trackBarVolume_MouseLeave(object sender, EventArgs e)
+        {
+            trackBarVolume.Hide();
+            mouseOnVolumeTrackbar = false;
+        }
+
+        private void button_volume_MouseLeave(object sender, EventArgs e)
+        {
+            //if(mouseOnVolumeTrackbar)
+              //  trackBarVolume.Hide();
+        }
+
+        private void button_volume_Click(object sender, EventArgs e)
+        {
+            if (!muted)
+            {
+                soundVolume = trackBarVolume.Value;
+                trackBarVolume.Value = 0;
+                muted = true;
+            }
+            else
+            {
+                trackBarVolume.Value = soundVolume;
+                muted = false;
+            }
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog oDialog = new OpenFileDialog();
+            //ofDialog.Filter = ; 
+            //ofDialog.InitialDirectory
+            if(oDialog.ShowDialog()==DialogResult.OK)
+            {
+                playMedia(oDialog.FileName);
+            }
+        }
+
+        private void playMedia(string filePath)
+        {
+            myVlcControl.Play(new FileInfo(filePath));
 
         }
     }
