@@ -31,7 +31,7 @@ namespace Licenta_MediaPlayer
             // de revenit asupra "problemei" 64 biti
             /*if (AssemblyName.GetAssemblyName(currentAssembly.Location).ProcessorArchitecture == ProcessorArchitecture.X86)
             {*/
-                e.VlcLibDirectory = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"lib\x86\")); //new DirectoryInfo(Path.Combine(currentDirectory, @"lib\x86\"));
+            e.VlcLibDirectory = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"lib\x86\")); //new DirectoryInfo(Path.Combine(currentDirectory, @"lib\x86\"));
             /*}
             else
             { e.VlcLibDirectory = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"lib\x64\"));//new DirectoryInfo(Path.Combine(currentDirectory, @"lib\x64\"));
@@ -40,12 +40,12 @@ namespace Licenta_MediaPlayer
 
         private void myVlcControl_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void button_play_Click(object sender, EventArgs e)
         {
-            if(paused)
+            if (paused)
             {
                 myVlcControl.Pause();
                 paused = false;
@@ -74,7 +74,7 @@ namespace Licenta_MediaPlayer
         private void button_volume_MouseLeave(object sender, EventArgs e)
         {
             //if(mouseOnVolumeTrackbar)
-              //  trackBarVolume.Hide();
+            //  trackBarVolume.Hide();
         }
 
         private void button_volume_Click(object sender, EventArgs e)
@@ -102,7 +102,7 @@ namespace Licenta_MediaPlayer
             OpenFileDialog oDialog = new OpenFileDialog();
             //ofDialog.Filter = ; 
             //ofDialog.InitialDirectory
-            if(oDialog.ShowDialog()==DialogResult.OK)
+            if (oDialog.ShowDialog() == DialogResult.OK)
             {
                 playMedia(oDialog.FileName);
             }
@@ -120,5 +120,32 @@ namespace Licenta_MediaPlayer
         {
             myVlcControl.Stop();
         }
+
+        private void OnVlcMediaLengthChanged(object sender, Vlc.DotNet.Core.VlcMediaPlayerLengthChangedEventArgs e)
+        {
+            label_toElapse.InvokeIfRequired(l => l.Text = new DateTime(new TimeSpan((long)e.NewLength).Ticks).ToString("T"));
+        }
+
+        private void OnVlcPositionChanged(object sender, Vlc.DotNet.Core.VlcMediaPlayerPositionChangedEventArgs e)
+        {
+            var position = myVlcControl.GetCurrentMedia().Duration.Ticks * e.NewPosition;
+
+            label_elapsed.InvokeIfRequired(l => l.Text = new DateTime((long)position).ToString("T"));
+        }
+
+        private void OnVlcPaused(object sender, Vlc.DotNet.Core.VlcMediaPlayerPausedEventArgs e)
+        {
+
+        }
+
+        private void OnVlcStopped(object sender, Vlc.DotNet.Core.VlcMediaPlayerStoppedEventArgs e)
+        {
+
+        }
+
+        private void OnVlcPlaying(object sender, Vlc.DotNet.Core.VlcMediaPlayerPlayingEventArgs e)
+        {
+        }
     }
+
 }

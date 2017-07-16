@@ -41,7 +41,9 @@
             this.button_volume = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.trackBarVolume = new System.Windows.Forms.TrackBar();
-            this.label1 = new System.Windows.Forms.Label();
+            this.label_elapsed = new System.Windows.Forms.Label();
+            this.label_toElapse = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.myVlcControl)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarElapsed)).BeginInit();
@@ -60,6 +62,11 @@
             this.myVlcControl.VlcLibDirectory = null;
             this.myVlcControl.VlcMediaplayerOptions = null;
             this.myVlcControl.VlcLibDirectoryNeeded += new System.EventHandler<Vlc.DotNet.Forms.VlcLibDirectoryNeededEventArgs>(this.OnVlcControlNeedsLibDirectory);
+            this.myVlcControl.LengthChanged += new System.EventHandler<Vlc.DotNet.Core.VlcMediaPlayerLengthChangedEventArgs>(this.OnVlcMediaLengthChanged);
+            this.myVlcControl.Paused += new System.EventHandler<Vlc.DotNet.Core.VlcMediaPlayerPausedEventArgs>(this.OnVlcPaused);
+            this.myVlcControl.Playing += new System.EventHandler<Vlc.DotNet.Core.VlcMediaPlayerPlayingEventArgs>(this.OnVlcPlaying);
+            this.myVlcControl.PositionChanged += new System.EventHandler<Vlc.DotNet.Core.VlcMediaPlayerPositionChangedEventArgs>(this.OnVlcPositionChanged);
+            this.myVlcControl.Stopped += new System.EventHandler<Vlc.DotNet.Core.VlcMediaPlayerStoppedEventArgs>(this.OnVlcStopped);
             // 
             // menuStrip1
             // 
@@ -152,7 +159,7 @@
             // trackBarVolume
             // 
             this.trackBarVolume.AutoSize = false;
-            this.trackBarVolume.Location = new System.Drawing.Point(703, 298);
+            this.trackBarVolume.Location = new System.Drawing.Point(700, 297);
             this.trackBarVolume.Maximum = 100;
             this.trackBarVolume.Name = "trackBarVolume";
             this.trackBarVolume.Orientation = System.Windows.Forms.Orientation.Vertical;
@@ -162,21 +169,41 @@
             this.trackBarVolume.Visible = false;
             this.trackBarVolume.MouseLeave += new System.EventHandler(this.trackBarVolume_MouseLeave);
             // 
-            // label1
+            // label_elapsed
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(131, 421);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(96, 13);
-            this.label1.TabIndex = 13;
-            this.label1.Text = "00:00:00/00:00:00";
+            this.label_elapsed.AutoSize = true;
+            this.label_elapsed.Location = new System.Drawing.Point(131, 421);
+            this.label_elapsed.Name = "label_elapsed";
+            this.label_elapsed.Size = new System.Drawing.Size(49, 13);
+            this.label_elapsed.TabIndex = 13;
+            this.label_elapsed.Text = "00:00:00";
+            // 
+            // label_toElapse
+            // 
+            this.label_toElapse.AutoSize = true;
+            this.label_toElapse.Location = new System.Drawing.Point(199, 421);
+            this.label_toElapse.Name = "label_toElapse";
+            this.label_toElapse.Size = new System.Drawing.Size(49, 13);
+            this.label_toElapse.TabIndex = 14;
+            this.label_toElapse.Text = "00:00:00";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(181, 421);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(12, 13);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "/";
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(764, 448);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label_toElapse);
+            this.Controls.Add(this.label_elapsed);
             this.Controls.Add(this.trackBarVolume);
             this.Controls.Add(this.button_volume);
             this.Controls.Add(this.trackBarElapsed);
@@ -211,6 +238,8 @@
         private System.Windows.Forms.Button button_volume;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.TrackBar trackBarVolume;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label_elapsed;
+        private System.Windows.Forms.Label label_toElapse;
+        private System.Windows.Forms.Label label2;
     }
 }
