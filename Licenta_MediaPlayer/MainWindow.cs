@@ -10,6 +10,8 @@ namespace Licenta_MediaPlayer
         bool mouseOnVolumeTrackbar;
         int soundVolume = 100;
         bool muted = false;
+        bool paused = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -43,7 +45,18 @@ namespace Licenta_MediaPlayer
 
         private void button_play_Click(object sender, EventArgs e)
         {
-            myVlcControl.Play(new Uri("http://download.blender.org/peach/bigbuckbunny_movies/big_buck_bunny_480p_surround-fix.avi"));
+            if(paused)
+            {
+                myVlcControl.Pause();
+                paused = false;
+                button_play.Text = "Pause";
+            }
+            else
+            {
+                myVlcControl.Pause();
+                paused = true;
+                button_play.Text = "Play";
+            }
         }
 
         private void button_volume_MouseEnter(object sender, EventArgs e)
@@ -98,7 +111,14 @@ namespace Licenta_MediaPlayer
         private void playMedia(string filePath)
         {
             myVlcControl.Play(new FileInfo(filePath));
+            Text = filePath;
+            paused = false;
+            button_play.Text = "Pause";
+        }
 
+        private void button_stop_Click(object sender, EventArgs e)
+        {
+            myVlcControl.Stop();
         }
     }
 }
