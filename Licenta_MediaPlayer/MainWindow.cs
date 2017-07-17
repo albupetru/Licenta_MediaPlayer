@@ -105,6 +105,7 @@ namespace Licenta_MediaPlayer
             if (oDialog.ShowDialog() == DialogResult.OK)
             {
                 playMedia(oDialog.FileName);
+                
             }
         }
 
@@ -114,6 +115,8 @@ namespace Licenta_MediaPlayer
             Text = filePath;
             paused = false;
             button_play.Text = "Pause";
+            trackBarElapsed.InvokeIfRequired(t => t.Maximum = (int)(myVlcControl.GetCurrentMedia().Duration.TotalMilliseconds));
+            MessageBox.Show(""+myVlcControl.GetCurrentMedia().Duration);
         }
 
         private void button_stop_Click(object sender, EventArgs e)
@@ -124,6 +127,9 @@ namespace Licenta_MediaPlayer
         private void OnVlcMediaLengthChanged(object sender, Vlc.DotNet.Core.VlcMediaPlayerLengthChangedEventArgs e)
         {
             label_toElapse.InvokeIfRequired(l => l.Text = new DateTime(new TimeSpan((long)e.NewLength).Ticks).ToString("T"));
+            //trackBarElapsed.InvokeIfRequired (t => t.Maximum= (int)(myVlcControl.GetCurrentMedia().Duration.TotalMilliseconds));  // schimbarea aici a dimensiunii seekbarului
+                                                                                                                                    // esueaza (probabil ca informatiile fisierului
+                                                                                                                                    // sunt incarcate dupa acest punct
         }
 
         private void OnVlcPositionChanged(object sender, Vlc.DotNet.Core.VlcMediaPlayerPositionChangedEventArgs e)
@@ -131,6 +137,8 @@ namespace Licenta_MediaPlayer
             var position = myVlcControl.GetCurrentMedia().Duration.Ticks * e.NewPosition;
 
             label_elapsed.InvokeIfRequired(l => l.Text = new DateTime((long)position).ToString("T"));
+            trackBarElapsed.InvokeIfRequired(t => t.Value = (int)myVlcControl.Time);
+            //trackBarElapsed.InvokeIfRequired(t => t.Value = (int)(myVlcControl.Position*(float)myVlcControl.GetCurrentMedia().Duration.TotalMilliseconds));
         }
 
         private void OnVlcPaused(object sender, Vlc.DotNet.Core.VlcMediaPlayerPausedEventArgs e)
@@ -145,7 +153,10 @@ namespace Licenta_MediaPlayer
 
         private void OnVlcPlaying(object sender, Vlc.DotNet.Core.VlcMediaPlayerPlayingEventArgs e)
         {
+            trackBarElapsed.InvokeIfRequired(t => t.Maximum = (int)(myVlcControl.GetCurrentMedia().Duration.TotalMilliseconds)); // de fiecare data cand clipul porneste/iese din pauza
+                                                                                                                                 // as putea folosi o variabila globala...
         }
+
     }
 
 }
