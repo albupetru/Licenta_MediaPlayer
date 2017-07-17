@@ -92,14 +92,14 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -143,6 +143,8 @@
             this.trackBarElapsed.Name = "trackBarElapsed";
             this.trackBarElapsed.Size = new System.Drawing.Size(417, 45);
             this.trackBarElapsed.TabIndex = 10;
+            this.trackBarElapsed.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackBarElapsed_MouseDown);
+            this.trackBarElapsed.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBarElapsed_MouseUp);
             // 
             // button_volume
             // 

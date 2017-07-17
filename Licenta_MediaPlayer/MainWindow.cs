@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
+using System.Globalization;
 
 namespace Licenta_MediaPlayer
 {
@@ -11,6 +12,7 @@ namespace Licenta_MediaPlayer
         int soundVolume = 100;
         bool muted = false;
         bool paused = false;
+        bool userIsPositioningTrackBar = false;
 
         public MainWindow()
         {
@@ -133,11 +135,13 @@ namespace Licenta_MediaPlayer
 
         private void OnVlcPositionChanged(object sender, Vlc.DotNet.Core.VlcMediaPlayerPositionChangedEventArgs e)
         {
-            var position = myVlcControl.GetCurrentMedia().Duration.Ticks * e.NewPosition;
-
-            label_elapsed.InvokeIfRequired(l => l.Text = new DateTime((long)position).ToString("T"));
-            trackBarElapsed.InvokeIfRequired(t => t.Value = (int)myVlcControl.Time);
-            //trackBarElapsed.InvokeIfRequired(t => t.Value = (int)(myVlcControl.Position*(float)myVlcControl.GetCurrentMedia().Duration.TotalMilliseconds));
+            if (userIsPositioningTrackBar == false)
+            {
+                var position = myVlcControl.GetCurrentMedia().Duration.Ticks * e.NewPosition;
+                label_elapsed.InvokeIfRequired(l => l.Text = new DateTime((long)position).ToString("T"));
+                trackBarElapsed.InvokeIfRequired(t => t.Value = (int)myVlcControl.Time);
+                //trackBarElapsed.InvokeIfRequired(t => t.Value = (int)(myVlcControl.Position*(float)myVlcControl.GetCurrentMedia().Duration.TotalMilliseconds));
+            }
         }
 
         private void OnVlcPaused(object sender, Vlc.DotNet.Core.VlcMediaPlayerPausedEventArgs e)
@@ -159,6 +163,18 @@ namespace Licenta_MediaPlayer
         private void trackBarVolume_ValueChanged(object sender, EventArgs e)
         {
             myVlcControl.InvokeIfRequired(v => v.Audio.Volume = trackBarVolume.Value);
+        }
+
+        private void trackBarElapsed_MouseDown(object sender, MouseEventArgs e)
+        {
+            userIsPositioningTrackBar = true;
+        }
+
+        private void trackBarElapsed_MouseUp(object sender, MouseEventArgs e)
+        {
+            myVlcControl.InvokeIfRequired(v => v.Time = Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture));
+            myVlcControl.Play();
+            userIsPositioningTrackBar = false;
         }
     }
 
