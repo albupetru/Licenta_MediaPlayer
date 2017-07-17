@@ -116,7 +116,6 @@ namespace Licenta_MediaPlayer
             paused = false;
             button_play.Text = "Pause";
             trackBarElapsed.InvokeIfRequired(t => t.Maximum = (int)(myVlcControl.GetCurrentMedia().Duration.TotalMilliseconds));
-            MessageBox.Show(""+myVlcControl.GetCurrentMedia().Duration);
         }
 
         private void button_stop_Click(object sender, EventArgs e)
@@ -157,6 +156,10 @@ namespace Licenta_MediaPlayer
                                                                                                                                  // as putea folosi o variabila globala...
         }
 
+        private void trackBarVolume_ValueChanged(object sender, EventArgs e)
+        {
+            myVlcControl.InvokeIfRequired(v => v.Audio.Volume = trackBarVolume.Value);
+        }
     }
 
 }

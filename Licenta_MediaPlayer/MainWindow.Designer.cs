@@ -167,6 +167,7 @@
             this.trackBarVolume.TabIndex = 12;
             this.trackBarVolume.Value = 100;
             this.trackBarVolume.Visible = false;
+            this.trackBarVolume.ValueChanged += new System.EventHandler(this.trackBarVolume_ValueChanged);
             this.trackBarVolume.MouseLeave += new System.EventHandler(this.trackBarVolume_MouseLeave);
             // 
             // label_elapsed
