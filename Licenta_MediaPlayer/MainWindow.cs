@@ -117,7 +117,7 @@ namespace Licenta_MediaPlayer
             Text = filePath;
             paused = false;
             button_play.Text = "Pause";
-            trackBarElapsed.InvokeIfRequired(t => t.Maximum = (int)(myVlcControl.GetCurrentMedia().Duration.TotalMilliseconds));
+            trackBarElapsed.InvokeIfRequired(t => t.Maximum = (int)(myVlcControl.GetCurrentMedia().Duration.TotalSeconds));
         }
 
         private void button_stop_Click(object sender, EventArgs e)
@@ -139,7 +139,7 @@ namespace Licenta_MediaPlayer
             {
                 var position = myVlcControl.GetCurrentMedia().Duration.Ticks * e.NewPosition;
                 label_elapsed.InvokeIfRequired(l => l.Text = new DateTime((long)position).ToString("T"));
-                trackBarElapsed.InvokeIfRequired(t => t.Value = (int)myVlcControl.Time);
+                trackBarElapsed.InvokeIfRequired(t => t.Value = (int)(myVlcControl.Time/1000));
                 //trackBarElapsed.InvokeIfRequired(t => t.Value = (int)(myVlcControl.Position*(float)myVlcControl.GetCurrentMedia().Duration.TotalMilliseconds));
             }
         }
@@ -156,8 +156,8 @@ namespace Licenta_MediaPlayer
 
         private void OnVlcPlaying(object sender, Vlc.DotNet.Core.VlcMediaPlayerPlayingEventArgs e)
         {
-            trackBarElapsed.InvokeIfRequired(t => t.Maximum = (int)(myVlcControl.GetCurrentMedia().Duration.TotalMilliseconds)); // de fiecare data cand clipul porneste/iese din pauza
-                                                                                                                                 // as putea folosi o variabila globala...
+            trackBarElapsed.InvokeIfRequired(t => t.Maximum = (int)(myVlcControl.GetCurrentMedia().Duration.TotalSeconds)); // de fiecare data cand clipul porneste/iese din pauza
+                                                                                                                            // as putea folosi o variabila globala...
         }
 
         private void trackBarVolume_ValueChanged(object sender, EventArgs e)
@@ -167,13 +167,19 @@ namespace Licenta_MediaPlayer
 
         private void trackBarElapsed_MouseDown(object sender, MouseEventArgs e)
         {
+            // sari la locatia clickuita
+            double dblValue = ((double)e.X / (double)trackBarElapsed.Width) * (trackBarElapsed.Maximum - trackBarElapsed.Minimum);
+            trackBarElapsed.Value = Convert.ToInt32(dblValue);
+            //trackBarElapsed.InvokeIfRequired(t => t.Value = Convert.ToInt32(dblValue));
+
             userIsPositioningTrackBar = true;
         }
 
         private void trackBarElapsed_MouseUp(object sender, MouseEventArgs e)
         {
-            myVlcControl.InvokeIfRequired(v => v.Time = Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture));
+            myVlcControl.InvokeIfRequired(v => v.Time = 1000*Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture));
             myVlcControl.Play();
+
             userIsPositioningTrackBar = false;
         }
     }
