@@ -182,6 +182,11 @@ namespace Licenta_MediaPlayer
 
             userIsPositioningTrackBar = false;
         }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
 }

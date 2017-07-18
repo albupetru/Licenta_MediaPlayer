@@ -44,6 +44,7 @@
             this.label_elapsed = new System.Windows.Forms.Label();
             this.label_toElapse = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.myVlcControl)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarElapsed)).BeginInit();
@@ -105,6 +106,8 @@
             // 
             // toolsToolStripMenuItem
             // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.optionsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -139,7 +142,7 @@
             // 
             this.trackBarElapsed.BackColor = System.Drawing.SystemColors.Control;
             this.trackBarElapsed.Location = new System.Drawing.Point(254, 416);
-            this.trackBarElapsed.Maximum = 100;
+            this.trackBarElapsed.Maximum = 0;
             this.trackBarElapsed.Name = "trackBarElapsed";
             this.trackBarElapsed.Size = new System.Drawing.Size(417, 45);
             this.trackBarElapsed.TabIndex = 10;
@@ -199,6 +202,13 @@
             this.label2.TabIndex = 15;
             this.label2.Text = "/";
             // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.optionsToolStripMenuItem.Text = "Options";
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -244,5 +254,6 @@
         private System.Windows.Forms.Label label_elapsed;
         private System.Windows.Forms.Label label_toElapse;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
     }
 }
