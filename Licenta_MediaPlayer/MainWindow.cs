@@ -50,7 +50,7 @@ namespace Licenta_MediaPlayer
 
         }
 
-        private void button_play_Click(object sender, EventArgs e)
+        private void playPause()
         {
             if (paused)
             {
@@ -64,6 +64,10 @@ namespace Licenta_MediaPlayer
                 paused = true;
                 button_play.Text = "Play";
             }
+        }
+        private void button_play_Click(object sender, EventArgs e)
+        {
+            playPause();
             trackBarElapsed.Focus();
         }
 
@@ -341,10 +345,14 @@ namespace Licenta_MediaPlayer
         {
             if (e.KeyCode == Keys.Enter)
                 fullscreen();
-            else if(e.KeyCode == Keys.Space)
+            else if (e.KeyCode == Keys.Space)
             {
+                playPause();
                 // pause/start/resume playback function call
             }
+            else if (e.KeyCode == Keys.Escape && isFullscreen)
+                fullscreen();
+
         }
 
         private void panelTime_Paint(object sender, PaintEventArgs e)
