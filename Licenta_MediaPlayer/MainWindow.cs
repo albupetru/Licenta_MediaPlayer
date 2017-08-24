@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Licenta_MediaPlayer
 {
@@ -13,6 +14,10 @@ namespace Licenta_MediaPlayer
         bool muted = false;
         bool paused = false;
         bool userIsPositioningTrackBar = false;
+        bool isFullscreen = false;
+        string recordFolder = Application.StartupPath + @"\rec";
+        string MRL = "";
+        string RecordingFileName = "";
 
         public MainWindow()
         {
@@ -59,18 +64,19 @@ namespace Licenta_MediaPlayer
                 paused = true;
                 button_play.Text = "Play";
             }
+            trackBarElapsed.Focus();
         }
 
         private void button_volume_MouseEnter(object sender, EventArgs e)
         {
-            trackBarVolume.Show();
-            mouseOnVolumeTrackbar = true;
+            /*trackBarVolume.Show();
+            mouseOnVolumeTrackbar = true;*/
         }
 
         private void trackBarVolume_MouseLeave(object sender, EventArgs e)
         {
-            trackBarVolume.Hide();
-            mouseOnVolumeTrackbar = false;
+           /* trackBarVolume.Hide();
+            mouseOnVolumeTrackbar = false;*/
         }
 
         private void button_volume_MouseLeave(object sender, EventArgs e)
@@ -107,7 +113,7 @@ namespace Licenta_MediaPlayer
             if (oDialog.ShowDialog() == DialogResult.OK)
             {
                 playMedia(oDialog.FileName);
-                
+                MRL = myVlcControl.GetCurrentMedia().Mrl;                
             }
         }
 
@@ -185,7 +191,184 @@ namespace Licenta_MediaPlayer
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+        }
+        
+        void RecordMedia()
+        {
+            vlcStop();
+            RecordingFileName = "";
+            string finalfilename = "";
 
+            if (this.myVlcControl!= null && !string.IsNullOrEmpty(MRL) && !string.IsNullOrEmpty(recordFolder))
+            {
+                try
+                {
+
+                    if (Directory.Exists(recordFolder))
+                    { // video files directory
+
+                        string data = "";
+                        try { data = ("-" + label_elapsed.Text + "-" + GetClock()).Replace(':', '-'); } catch { data = ""; }
+                        finalfilename = recordFolder + "\\" + "REC" + data + ".mp4";
+
+                        var options = new string[] { @":sout=#duplicate{dst=display,dst=std{access=file,mux=ts,dst='" + finalfilename + @"'}}" }; 
+                                                                                    // pt formatele (video) nesuportate de VLC salveaza doar audio ex: .mkv
+                                                                                    // pt 3gp nu faci export audio
+                                                                                    // wmv de asemenea nu merge (sau nu ia audio si video poate fi vazut doar pe anumite playere?) 
+                        // play & record
+                        RecordingFileName = finalfilename;
+                        try
+                        {
+                            if (!this.myVlcControl.IsPlaying)
+                            {
+                                this.myVlcControl.Play(new Uri(MRL), options);
+                                //createDelay(1000);
+                            };
+                        }
+                        catch
+                        {
+                            vlcStop();
+                        }
+                    }
+
+                }
+                catch { }
+            }
+
+            //getMediaDuration();
+        }
+
+        void vlcStop()
+        {
+            RecordingFileName = "";
+            myVlcControl.Stop();
+        }
+
+        private void button_record_Click(object sender, EventArgs e)
+        {
+            RecordMedia();
+        }
+
+        string GetClock()
+        {
+            string ClockInstring = "";
+            // Get current time:
+            int hour = DateTime.Now.Hour;
+            int min = DateTime.Now.Minute;
+            int sec = DateTime.Now.Second;
+            // Format current time into string:
+            ClockInstring = (hour < 10) ? "0" + hour.ToString() : hour.ToString();
+            ClockInstring += ":" + ((min < 10) ? "0" + min.ToString() : min.ToString());
+            ClockInstring += ":" + ((sec < 10) ? "0" + sec.ToString() : sec.ToString());
+            return ClockInstring;
+        }
+
+        private void shareToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            /*var facebookClient = new FacebookClient();
+            var facebookService = new FacebookService(facebookClient);
+            var getAccountTask = facebookService.GetAccountAsync(FacebookSettings.AccessToken);
+            Task.WaitAll(getAccountTask);
+            var account = getAccountTask.Result;
+            Console.WriteLine($"{account.Id} {account.Name}");
+
+            var postOnWallTask = facebookService.PostOnWallAsync(FacebookSettings.AccessToken,
+            "Hello from C# .NET Core!");
+            Task.WaitAll(postOnWallTask);*/
+
+            Form1 fbForm = new Form1();
+            fbForm.Show();
+            this.Hide();
+        }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+            panel1.Dock = DockStyle.Fill; // deoarece MouseEvent-urile sunt dezactivate in timp ce Vlccontrol reda media
+                                          // folosesc un panou ce acopera tot vlccontrolul si are ca mouse event fullscreen pe 2xclick
+            //panel1.BackColor = System.Drawing.Color.Transparent;
+            myVlcControl.Controls.Add(panel1);
+        }
+
+        private void myVlcControl_Click_1(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void fullscreen()
+        {        
+            //MessageBox.Show("Fullscr");
+            if (isFullscreen)
+            {
+                this.MaximizeBox = true;
+                this.WindowState = FormWindowState.Normal;
+                this.FormBorderStyle = FormBorderStyle.Sizable;
+                isFullscreen = false;
+                myVlcControl.Dock = DockStyle.None;
+                menuStrip1.Visible = true;
+                panelBottom.Visible = true;
+            }
+            else
+            {
+                this.MaximizeBox = false;
+                this.WindowState = FormWindowState.Maximized;
+                this.FormBorderStyle = FormBorderStyle.None;
+                myVlcControl.Dock = DockStyle.Fill;
+                menuStrip1.Visible = false;
+                panelBottom.Visible = false;
+                isFullscreen = true;
+            }
+        }
+
+
+        private void button_fullscreen_Click(object sender, EventArgs e)
+        {
+            fullscreen();
+        }
+
+
+        private void panel1_DoubleClick(object sender, EventArgs e)
+        {
+            fullscreen();
+        }
+
+
+        private void MainWindow_DoubleClick(object sender, EventArgs e)
+        {
+            fullscreen();
+        }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                fullscreen();
+            else if(e.KeyCode == Keys.Space)
+            {
+                // pause/start/resume playback function call
+            }
+        }
+
+        private void panelTime_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panelBottom_MouseEnter(object sender, EventArgs e)
+        {
+            if (isFullscreen) panelBottom.Visible = true;
+        }
+
+        private void panelBottom_MouseLeave(object sender, EventArgs e)
+        {
+            if (isFullscreen) panelBottom.Visible = false;
+        }
+
+        private void panel1_Click(object sender, EventArgs e)
+        {
+            if (isFullscreen)
+            {
+                panelBottom.Visible = !panelBottom.Visible;
+                menuStrip1.Visible = !menuStrip1.Visible;
+            }
         }
     }
 

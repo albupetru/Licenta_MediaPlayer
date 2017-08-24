@@ -11,3 +11,9 @@ D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_Med
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.exe
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.pdb
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.MainWindow.resources
+d:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Newtonsoft.Json.dll
+d:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Newtonsoft.Json.xml
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.Form1.resources
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Facebook.dll
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Facebook.xml
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.Form2.resources
