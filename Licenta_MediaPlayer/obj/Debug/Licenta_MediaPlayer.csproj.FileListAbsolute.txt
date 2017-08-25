@@ -17,3 +17,7 @@ D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\MediaToolki
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.FacebookBrowserLogin.resources
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.FacebookPostForm.resources
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.WaitForm.resources
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Licenta_MediaPlayer.exe.manifest
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Licenta_MediaPlayer.application
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.exe.manifest
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.application

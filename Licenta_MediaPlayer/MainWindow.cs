@@ -57,7 +57,9 @@ namespace Licenta_MediaPlayer
         {
             if (paused)
             {
-                myVlcControl.Pause();
+                if (trackBarElapsed.Value != trackBarElapsed.Maximum)
+                    myVlcControl.Pause();
+                else playMedia(currentlyPlayedFilePath);
                 paused = false;
                 button_play.Text = "Pause";
             }
@@ -171,6 +173,16 @@ namespace Licenta_MediaPlayer
         {
             label_elapsed.Text = "00:00:00";
             label_toElapse.Text = "00:00:00";
+            if (isRecording)
+            {
+                RecordMediaToolkit(recordStartPoint, Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture));
+                isRecording = false;
+                recordStartPoint = 0;
+                panelRec.Hide();
+                button_play.Text = "Play";
+            }
+            currentlyPlayedFilePath = "";
+            this.Text = "SociaPlayer";
         }
 
         private void OnVlcPlaying(object sender, Vlc.DotNet.Core.VlcMediaPlayerPlayingEventArgs e)
@@ -206,7 +218,7 @@ namespace Licenta_MediaPlayer
         {
         }
         
-        void RecordMedia()
+        void RecordMedia()                         // pot sa folosesc vlcdotnet pt a inregistra streamuri - care probabil nu sunt suportate de ffmpeg
         {
             vlcStop();
             RecordingFileName = "";
@@ -220,7 +232,6 @@ namespace Licenta_MediaPlayer
 
                     if (Directory.Exists(recordFolder))
                     { // video files directory
-                        // pot sa folosesc vlcdotnet pt a inregistra streamuri
                         string data = "";
                         try { data = ("-" + label_elapsed.Text + "-" + GetClock()).Replace(':', '-'); } catch { data = ""; }
                         finalfilename = recordFolder + "\\" + "REC" + data + ".mp4";
@@ -315,6 +326,7 @@ namespace Licenta_MediaPlayer
                     panelRec.Hide();
                     myVlcControl.Pause();
                     button_play.Text = "Play";
+                    paused = true;
                 }
                 else
                 {
@@ -339,10 +351,6 @@ namespace Licenta_MediaPlayer
             ClockInstring += ":" + ((min < 10) ? "0" + min.ToString() : min.ToString());
             ClockInstring += ":" + ((sec < 10) ? "0" + sec.ToString() : sec.ToString());
             return ClockInstring;
-        }
-
-        private void shareToolStripMenuItem_Click(object sender, EventArgs e)
-        {
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -489,6 +497,36 @@ namespace Licenta_MediaPlayer
         {
             FacebookBrowserLogin fbl = new FacebookBrowserLogin(filePath);
             fbl.Show();
+        }
+
+        private void myVlcControl_EndReached(object sender, Vlc.DotNet.Core.VlcMediaPlayerEndReachedEventArgs e)
+        {
+            try
+            {
+                if (InvokeRequired) { this.BeginInvoke(new Action(() => this.myVlcControl_EndReached(sender, e))); } else { vlcEndReached(); }
+            }
+            catch { }
+        }
+
+        void vlcEndReached()
+        {
+            //label_elapsed.Text = "00:00:00";
+            label_elapsed.InvokeIfRequired(l => l.Text = "00:00:00");
+            //label_toElapse.Text = "00:00:00";
+            label_toElapse.InvokeIfRequired(l => l.Text = "00:00:00");
+
+            button_play.Text = "Play";
+            paused = true;
+            if (isRecording)
+            {
+                RecordMediaToolkit(recordStartPoint, Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture));
+                isRecording = false;
+                recordStartPoint = 0;
+                panelRec.Hide();
+                button_play.Enabled = true;
+                button_stop.Enabled = true;
+                button_share.Enabled = true;
+            }
         }
     }
 

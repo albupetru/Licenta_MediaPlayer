@@ -11,3 +11,13 @@ D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\x64\Debug\Licenta
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\x64\Debug\Licenta_MediaPlayer.exe
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\x64\Debug\Licenta_MediaPlayer.pdb
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\x64\Debug\Licenta_MediaPlayer.csprojResolveAssemblyReference.cache
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\x64\Debug\Licenta_MediaPlayer.exe.manifest
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\x64\Debug\Licenta_MediaPlayer.application
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\x64\Debug\Facebook.dll
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\x64\Debug\MediaToolkit.dll
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\x64\Debug\Facebook.xml
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\x64\Debug\Licenta_MediaPlayer.FacebookBrowserLogin.resources
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\x64\Debug\Licenta_MediaPlayer.FacebookPostForm.resources
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\x64\Debug\Licenta_MediaPlayer.WaitForm.resources
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\x64\Debug\Licenta_MediaPlayer.exe.manifest
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\x64\Debug\Licenta_MediaPlayer.application
