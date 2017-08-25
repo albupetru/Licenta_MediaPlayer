@@ -80,7 +80,7 @@ namespace Licenta_MediaPlayer
             parameters.privacy = t;
             WaitForm wt = new WaitForm();
             wt.Show();
-            //MessageBox.Show("pls wait");
+            //MessageBox.Show("wait");
             dynamic result = fb.Post("/me/videos", parameters); // HANDLE THE ERRORS!!!!
             wt.Close();
 
