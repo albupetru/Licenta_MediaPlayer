@@ -55,12 +55,16 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panelTime = new System.Windows.Forms.Panel();
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.panelRec = new System.Windows.Forms.Panel();
+            this.label_rec_duration = new System.Windows.Forms.Label();
+            this.label_recd = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.myVlcControl)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarElapsed)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).BeginInit();
             this.panelTime.SuspendLayout();
             this.panelBottom.SuspendLayout();
+            this.panelRec.SuspendLayout();
             this.SuspendLayout();
             // 
             // myVlcControl
@@ -228,7 +232,6 @@
             this.trackBarVolume.TabIndex = 12;
             this.trackBarVolume.Value = 100;
             this.trackBarVolume.ValueChanged += new System.EventHandler(this.trackBarVolume_ValueChanged);
-            this.trackBarVolume.MouseLeave += new System.EventHandler(this.trackBarVolume_MouseLeave);
             // 
             // label_elapsed
             // 
@@ -291,6 +294,7 @@
             this.button_share.TabIndex = 17;
             this.button_share.Text = "Share";
             this.button_share.UseVisualStyleBackColor = true;
+            this.button_share.Click += new System.EventHandler(this.button_share_Click);
             // 
             // button_fullscreen
             // 
@@ -330,6 +334,7 @@
             // 
             this.panelBottom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelBottom.Controls.Add(this.panelRec);
             this.panelBottom.Controls.Add(this.trackBarVolume);
             this.panelBottom.Controls.Add(this.button_stop);
             this.panelBottom.Controls.Add(this.button_record);
@@ -343,8 +348,39 @@
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(764, 70);
             this.panelBottom.TabIndex = 21;
-            this.panelBottom.MouseEnter += new System.EventHandler(this.panelBottom_MouseEnter);
-            this.panelBottom.MouseLeave += new System.EventHandler(this.panelBottom_MouseLeave);
+            // 
+            // panelRec
+            // 
+            this.panelRec.BackColor = System.Drawing.Color.Red;
+            this.panelRec.Controls.Add(this.label_rec_duration);
+            this.panelRec.Controls.Add(this.label_recd);
+            this.panelRec.Location = new System.Drawing.Point(9, 33);
+            this.panelRec.Name = "panelRec";
+            this.panelRec.Size = new System.Drawing.Size(130, 24);
+            this.panelRec.TabIndex = 21;
+            this.panelRec.Visible = false;
+            // 
+            // label_rec_duration
+            // 
+            this.label_rec_duration.AutoSize = true;
+            this.label_rec_duration.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_rec_duration.ForeColor = System.Drawing.Color.White;
+            this.label_rec_duration.Location = new System.Drawing.Point(79, 6);
+            this.label_rec_duration.Name = "label_rec_duration";
+            this.label_rec_duration.Size = new System.Drawing.Size(32, 13);
+            this.label_rec_duration.TabIndex = 1;
+            this.label_rec_duration.Text = "0:00";
+            // 
+            // label_recd
+            // 
+            this.label_recd.AutoSize = true;
+            this.label_recd.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_recd.ForeColor = System.Drawing.Color.White;
+            this.label_recd.Location = new System.Drawing.Point(14, 6);
+            this.label_recd.Name = "label_recd";
+            this.label_recd.Size = new System.Drawing.Size(59, 13);
+            this.label_recd.TabIndex = 0;
+            this.label_recd.Text = "Duration:";
             // 
             // MainWindow
             // 
@@ -372,6 +408,8 @@
             this.panelTime.ResumeLayout(false);
             this.panelTime.PerformLayout();
             this.panelBottom.ResumeLayout(false);
+            this.panelRec.ResumeLayout(false);
+            this.panelRec.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -404,5 +442,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panelTime;
         private System.Windows.Forms.Panel panelBottom;
+        private System.Windows.Forms.Panel panelRec;
+        private System.Windows.Forms.Label label_rec_duration;
+        private System.Windows.Forms.Label label_recd;
     }
 }

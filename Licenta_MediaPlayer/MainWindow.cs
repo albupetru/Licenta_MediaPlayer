@@ -4,20 +4,28 @@ using System.Reflection;
 using System.IO;
 using System.Globalization;
 using System.Threading.Tasks;
+using MediaToolkit;
+using MediaToolkit.Model;
+using MediaToolkit.Options;
+using MediaToolkit.Util;
 
 namespace Licenta_MediaPlayer
 {
     public partial class MainWindow : Form
     {
-        bool mouseOnVolumeTrackbar;
+        //bool mouseOnVolumeTrackbar;
         int soundVolume = 100;
         bool muted = false;
         bool paused = false;
         bool userIsPositioningTrackBar = false;
         bool isFullscreen = false;
+        bool isRecording = false;
+        int recordStartPoint = 0;
         string recordFolder = Application.StartupPath + @"\rec";
         string MRL = "";
         string RecordingFileName = "";
+        string currentlyPlayedFilePath = "";
+        string lastRecordedFilePath = "";
 
         public MainWindow()
         {
@@ -44,11 +52,6 @@ namespace Licenta_MediaPlayer
             { e.VlcLibDirectory = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"lib\x64\"));//new DirectoryInfo(Path.Combine(currentDirectory, @"lib\x64\"));
             }*/
         }/**/
-
-        private void myVlcControl_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void playPause()
         {
@@ -124,6 +127,7 @@ namespace Licenta_MediaPlayer
         private void playMedia(string filePath)
         {
             myVlcControl.Play(new FileInfo(filePath));
+            currentlyPlayedFilePath = filePath;
             Text = filePath;
             paused = false;
             button_play.Text = "Pause";
@@ -132,6 +136,7 @@ namespace Licenta_MediaPlayer
 
         private void button_stop_Click(object sender, EventArgs e)
         {
+            button_play.Text = "Play";
             myVlcControl.Stop();
         }
 
@@ -151,6 +156,9 @@ namespace Licenta_MediaPlayer
                 label_elapsed.InvokeIfRequired(l => l.Text = new DateTime((long)position).ToString("T"));
                 trackBarElapsed.InvokeIfRequired(t => t.Value = (int)(myVlcControl.Time/1000));
                 //trackBarElapsed.InvokeIfRequired(t => t.Value = (int)(myVlcControl.Position*(float)myVlcControl.GetCurrentMedia().Duration.TotalMilliseconds));
+                if (isRecording)
+                    label_rec_duration.InvokeIfRequired(l => l.Text = (trackBarElapsed.Value - recordStartPoint) / 60 + ":" + (trackBarElapsed.Value - recordStartPoint) % 60);
+                    //label_rec_duration.InvokeIfRequired(l => l.Text = new DateTime( (long)((trackBarElapsed.Value - recordStartPoint)*10000000)).ToString("T"));
             }
         }
 
@@ -161,7 +169,8 @@ namespace Licenta_MediaPlayer
 
         private void OnVlcStopped(object sender, Vlc.DotNet.Core.VlcMediaPlayerStoppedEventArgs e)
         {
-
+            label_elapsed.Text = "00:00:00";
+            label_toElapse.Text = "00:00:00";
         }
 
         private void OnVlcPlaying(object sender, Vlc.DotNet.Core.VlcMediaPlayerPlayingEventArgs e)
@@ -202,6 +211,7 @@ namespace Licenta_MediaPlayer
             vlcStop();
             RecordingFileName = "";
             string finalfilename = "";
+            //int trackBarMarker = Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture);
 
             if (this.myVlcControl!= null && !string.IsNullOrEmpty(MRL) && !string.IsNullOrEmpty(recordFolder))
             {
@@ -210,23 +220,26 @@ namespace Licenta_MediaPlayer
 
                     if (Directory.Exists(recordFolder))
                     { // video files directory
-
+                        // pot sa folosesc vlcdotnet pt a inregistra streamuri
                         string data = "";
                         try { data = ("-" + label_elapsed.Text + "-" + GetClock()).Replace(':', '-'); } catch { data = ""; }
                         finalfilename = recordFolder + "\\" + "REC" + data + ".mp4";
+                        //int trckelsp = trackBarElapsed.Value;
+                        int trackBarMarker = Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture); // am salvat poz de playback inainte sa dau record
 
-                        var options = new string[] { @":sout=#duplicate{dst=display,dst=std{access=file,mux=ts,dst='" + finalfilename + @"'}}" }; 
+                        var options = new string[] {@":sout=#duplicate{dst=display,dst=std{access=file,mux=ts,dst='" + finalfilename + @"'}}",
+                                                     @":start-time=" + trackBarMarker}; 
                                                                                     // pt formatele (video) nesuportate de VLC salveaza doar audio ex: .mkv
-                                                                                    // pt 3gp nu faci export audio
+                                                                                    // pt 3gp nu face export audio
                                                                                     // wmv de asemenea nu merge (sau nu ia audio si video poate fi vazut doar pe anumite playere?) 
                         // play & record
                         RecordingFileName = finalfilename;
                         try
                         {
                             if (!this.myVlcControl.IsPlaying)
-                            {
+                            {                               
                                 this.myVlcControl.Play(new Uri(MRL), options);
-                                //createDelay(1000);
+                                //createDelay(1000);                                                             
                             };
                         }
                         catch
@@ -242,6 +255,45 @@ namespace Licenta_MediaPlayer
             //getMediaDuration();
         }
 
+        void RecordMediaToolkit(int start, int end)
+        {
+            RecordingFileName = "";
+            string finalfilename = "";
+            int trackBarMarker = Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture);
+
+            if (this.myVlcControl != null && !string.IsNullOrEmpty(MRL) && !string.IsNullOrEmpty(recordFolder))
+            {
+                try
+                {
+
+                    if (Directory.Exists(recordFolder))
+                    { 
+                        string data;
+                        try { data = ("-" + label_elapsed.Text + "-" + GetClock()).Replace(':', '-'); } catch { data = ""; }
+                        finalfilename = recordFolder + "\\" + "REC" + data + Path.GetExtension(currentlyPlayedFilePath);
+                        lastRecordedFilePath = finalfilename;
+
+                        var inputFile = new MediaFile { Filename = currentlyPlayedFilePath };
+                        var outputFile = new MediaFile { Filename = finalfilename };
+
+                        using (var engine = new Engine())
+                        {
+                            engine.GetMetadata(inputFile);
+
+                            var options = new ConversionOptions();
+
+                            options.CutMedia(TimeSpan.FromSeconds(start), TimeSpan.FromSeconds(end-start));
+
+                            engine.Convert(inputFile, outputFile, options);
+                        }
+                    }
+
+                }
+                catch { }
+            }
+
+        }
+
         void vlcStop()
         {
             RecordingFileName = "";
@@ -250,7 +302,29 @@ namespace Licenta_MediaPlayer
 
         private void button_record_Click(object sender, EventArgs e)
         {
-            RecordMedia();
+            //RecordMedia();
+            if (myVlcControl.IsPlaying)
+                if (isRecording)
+                {
+                    RecordMediaToolkit(recordStartPoint, Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture));
+                    isRecording = false;
+                    recordStartPoint = 0;
+                    button_play.Enabled = true;
+                    button_stop.Enabled = true;
+                    button_share.Enabled = true;
+                    panelRec.Hide();
+                    myVlcControl.Pause();
+                    button_play.Text = "Play";
+                }
+                else
+                {
+                    recordStartPoint = Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture);
+                    isRecording = true;
+                    button_play.Enabled = false;
+                    button_stop.Enabled = false;
+                    button_share.Enabled = false;
+                    panelRec.Show();
+                }
         }
 
         string GetClock()
@@ -269,20 +343,6 @@ namespace Licenta_MediaPlayer
 
         private void shareToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            /*var facebookClient = new FacebookClient();
-            var facebookService = new FacebookService(facebookClient);
-            var getAccountTask = facebookService.GetAccountAsync(FacebookSettings.AccessToken);
-            Task.WaitAll(getAccountTask);
-            var account = getAccountTask.Result;
-            Console.WriteLine($"{account.Id} {account.Name}");
-
-            var postOnWallTask = facebookService.PostOnWallAsync(FacebookSettings.AccessToken,
-            "Hello from C# .NET Core!");
-            Task.WaitAll(postOnWallTask);*/
-
-            Form1 fbForm = new Form1();
-            fbForm.Show();
-            this.Hide();
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -300,7 +360,6 @@ namespace Licenta_MediaPlayer
 
         private void fullscreen()
         {        
-            //MessageBox.Show("Fullscr");
             if (isFullscreen)
             {
                 this.MaximizeBox = true;
@@ -310,6 +369,10 @@ namespace Licenta_MediaPlayer
                 myVlcControl.Dock = DockStyle.None;
                 menuStrip1.Visible = true;
                 panelBottom.Visible = true;
+                // cod pt redimensionarea corecta a vlccontrolului
+                myVlcControl.Width = this.Width - 16; // 16 px pt margini
+                myVlcControl.Height = this.Height - 130; // 130 de px ocupati pe verticala de celelalte controale
+                myVlcControl.Anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom);
             }
             else
             {
@@ -346,13 +409,9 @@ namespace Licenta_MediaPlayer
             if (e.KeyCode == Keys.Enter)
                 fullscreen();
             else if (e.KeyCode == Keys.Space)
-            {
                 playPause();
-                // pause/start/resume playback function call
-            }
             else if (e.KeyCode == Keys.Escape && isFullscreen)
                 fullscreen();
-
         }
 
         private void panelTime_Paint(object sender, PaintEventArgs e)
@@ -377,6 +436,59 @@ namespace Licenta_MediaPlayer
                 panelBottom.Visible = !panelBottom.Visible;
                 menuStrip1.Visible = !menuStrip1.Visible;
             }
+        }
+
+        private void button_share_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Do you want to share the last recorded file?\n(Tip: Choose No to share another clip!)", "Confirmation", MessageBoxButtons.YesNoCancel);
+
+            if (result == DialogResult.Yes)
+            {
+                //...
+                if(lastRecordedFilePath!="")
+                {
+                    shareOnFacebook(lastRecordedFilePath);
+                }
+                else
+                {
+                    DialogResult result2 = MessageBox.Show("There were no clips recorded in this session!\nDo you want to pick a previously recorded clip?", "", MessageBoxButtons.YesNo);
+                    if(result2 == DialogResult.Yes)
+                    {
+                        string fn = browseFileToUpload();
+                        if (fn!=null)
+                            shareOnFacebook(fn);
+                    }
+                }
+            }
+            else if (result == DialogResult.No)
+            {
+                string fn = browseFileToUpload();
+                if (fn != null)
+                    shareOnFacebook(fn);
+            }
+            else// cod pt dialogresult.cancel
+            {
+                //...
+            }
+        }
+
+        private string browseFileToUpload()
+        {
+            OpenFileDialog oDialog = new OpenFileDialog();
+            //oDialog.Filter = ; 
+            oDialog.InitialDirectory = recordFolder;
+            oDialog.Title = "Choose a file to share";
+            if (oDialog.ShowDialog() == DialogResult.OK)
+            {
+                return oDialog.FileName;
+            }
+            return null;
+        }
+
+        private void shareOnFacebook(string filePath)
+        {
+            FacebookBrowserLogin fbl = new FacebookBrowserLogin(filePath);
+            fbl.Show();
         }
     }
 
