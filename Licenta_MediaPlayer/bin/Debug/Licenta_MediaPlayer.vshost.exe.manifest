@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Licenta_MediaPlayer.exe" size="387536">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Licenta_MediaPlayer.exe" size="388048">
       <assemblyIdentity name="Licenta_MediaPlayer" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>x9nmt8usFC068Y9/Dum59XE8KrhRpf3UH7zFEWhMNO0=</dsig:DigestValue>
+        <dsig:DigestValue>oqLDp+aov/l3bwpydPDreLgil4E8+wHwzCGZKDr4BrY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
