@@ -54,14 +54,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Licenta_MediaPlayer.exe" size="315344">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Licenta_MediaPlayer.exe" size="387536">
       <assemblyIdentity name="Licenta_MediaPlayer" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>eJ39i5Bh59yEF82FptBOd09poxp6qTKvbg3fZK1IOZk=</dsig:DigestValue>
+        <dsig:DigestValue>x9nmt8usFC068Y9/Dum59XE8KrhRpf3UH7zFEWhMNO0=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -132,6 +132,15 @@
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
       <dsig:DigestValue>wzYDmmlEazAu+MGgiesO/xcjYEUMHk3WFvZ+P16Sf+A=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Options.xml" size="91" writeableType="applicationData">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ZWrY7075MoyAMTlrgrcfEF78bBzwb12ONUtpHDTPayE=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>
