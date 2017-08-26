@@ -36,6 +36,9 @@
             this.label_desc = new System.Windows.Forms.Label();
             this.label_title = new System.Windows.Forms.Label();
             this.richTextBoxTitle = new System.Windows.Forms.RichTextBox();
+            this.panelWait = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.panelWait.SuspendLayout();
             this.SuspendLayout();
             // 
             // button_post
@@ -112,11 +115,33 @@
             this.richTextBoxTitle.TabIndex = 6;
             this.richTextBoxTitle.Text = "";
             // 
+            // panelWait
+            // 
+            this.panelWait.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.panelWait.Controls.Add(this.label1);
+            this.panelWait.Location = new System.Drawing.Point(55, 75);
+            this.panelWait.Name = "panelWait";
+            this.panelWait.Size = new System.Drawing.Size(332, 122);
+            this.panelWait.TabIndex = 7;
+            this.panelWait.Visible = false;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(3, 52);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(328, 16);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Please wait while the video is being uploaded!";
+            // 
             // FacebookPostForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(450, 300);
+            this.Controls.Add(this.panelWait);
             this.Controls.Add(this.richTextBoxTitle);
             this.Controls.Add(this.label_title);
             this.Controls.Add(this.label_desc);
@@ -128,6 +153,8 @@
             this.Name = "FacebookPostForm";
             this.Text = "Post to Facebook";
             this.Load += new System.EventHandler(this.FacebookPostForm_Load);
+            this.panelWait.ResumeLayout(false);
+            this.panelWait.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -142,5 +169,7 @@
         private System.Windows.Forms.Label label_desc;
         private System.Windows.Forms.Label label_title;
         private System.Windows.Forms.RichTextBox richTextBoxTitle;
+        private System.Windows.Forms.Panel panelWait;
+        private System.Windows.Forms.Label label1;
     }
 }

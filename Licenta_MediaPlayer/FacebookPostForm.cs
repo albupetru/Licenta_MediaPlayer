@@ -12,6 +12,7 @@ using System.Drawing.Drawing2D;
 using System.Net;
 using System.IO;
 using System.Dynamic;
+using System.Threading;
 
 namespace Licenta_MediaPlayer
 {
@@ -29,6 +30,7 @@ namespace Licenta_MediaPlayer
 
         private void FacebookPostForm_Load(object sender, EventArgs e)
         {
+            panelWait.SendToBack();
             comboBox.SelectedIndex = 0;
             if (clientToken != null)
                 GetUserDetails();
@@ -65,7 +67,7 @@ namespace Licenta_MediaPlayer
             var fb = new FacebookClient(clientToken);
 
             dynamic parameters = new ExpandoObject();
-            parameters.source = new FacebookMediaObject { ContentType = "video", FileName = Path.GetFileName(uploadFilePath) }.SetValue(File.ReadAllBytes(uploadFilePath)); 
+            parameters.source = new FacebookMediaObject { ContentType = "video", FileName = Path.GetFileName(uploadFilePath) }.SetValue(File.ReadAllBytes(uploadFilePath));
             parameters.description = richTextBoxDesc.Text;
             dynamic t = new ExpandoObject();
 
@@ -78,12 +80,21 @@ namespace Licenta_MediaPlayer
             else t.value = "SELF";
 
             parameters.privacy = t;
-            WaitForm wt = new WaitForm();
-            wt.Show();
-            //MessageBox.Show("wait");
-            dynamic result = fb.Post("/me/videos", parameters); // HANDLE THE ERRORS!!!!
-            wt.Close();
 
+            //WaitForm wt = new WaitForm();
+            //wt.Show();
+            panelWait.Show();
+            panelWait.BringToFront();
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+                dynamic result = fb.Post("/me/videos", parameters); // HANDLE THE ERRORS!!!!
+            }).Start();
+            //MessageBox.Show("wait");
+            
+            //wt.Close();
+            panelWait.Hide();
+            panelWait.SendToBack();
             MessageBox.Show("Video has been added to timeline!");
             this.Close();
         }

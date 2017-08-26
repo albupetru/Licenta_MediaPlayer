@@ -3,7 +3,9 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
 using System.Globalization;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using MediaToolkit;
 using MediaToolkit.Model;
 using MediaToolkit.Options;
@@ -26,10 +28,16 @@ namespace Licenta_MediaPlayer
         string RecordingFileName = "";
         string currentlyPlayedFilePath = "";
         string lastRecordedFilePath = "";
+        string settingsPath = "";
+        string filePlayed = "";
 
         public MainWindow()
         {
             InitializeComponent();
+            settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Options.xml");
+            if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Options.xml")))
+                createOptionsXml();
+            Directory.CreateDirectory(Application.StartupPath + @"\Recorded Videos"); // creez directorul default daca nu exista
             //if (this.myVlcControl != null) { this.myVlcControl.Dispose(); this.myVlcControl = null; }
             //this.myVlcControl = new Vlc.DotNet.Forms.VlcControl();
             myVlcControl.VlcLibDirectoryNeeded += OnVlcControlNeedsLibDirectory;
@@ -122,7 +130,10 @@ namespace Licenta_MediaPlayer
             if (oDialog.ShowDialog() == DialogResult.OK)
             {
                 playMedia(oDialog.FileName);
-                MRL = myVlcControl.GetCurrentMedia().Mrl;                
+                MRL = myVlcControl.GetCurrentMedia().Mrl;
+                button_play.Enabled = true;
+                button_stop.Enabled = true;
+                button_record.Enabled = true;
             }
         }
 
@@ -139,6 +150,10 @@ namespace Licenta_MediaPlayer
         private void button_stop_Click(object sender, EventArgs e)
         {
             button_play.Text = "Play";
+            //o smecherie ca sa folosesc tot metoda de play/pause
+            trackBarElapsed.Value = trackBarElapsed.Maximum; 
+            paused = true;  
+            // endOfSmecherie
             myVlcControl.Stop();
         }
 
@@ -181,7 +196,8 @@ namespace Licenta_MediaPlayer
                 panelRec.Hide();
                 button_play.Text = "Play";
             }
-            currentlyPlayedFilePath = "";
+            //currentlyPlayedFilePath = ""; // comentat pt ca daca se apasa play sa redea tot fisierul pe care il reda inainte de stop; lasat ca reminder daca decid sa schimb
+                                            // functionalitatea butonului, sa se comporte ca cel din VlcPlayer (vezi programul) - comportament care e dependent de existenta unui playlist
             this.Text = "SociaPlayer";
         }
 
@@ -216,6 +232,8 @@ namespace Licenta_MediaPlayer
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            OptionsWindow opW = new OptionsWindow();
+            opW.ShowDialog();
         }
         
         void RecordMedia()                         // pot sa folosesc vlcdotnet pt a inregistra streamuri - care probabil nu sunt suportate de ffmpeg
@@ -271,6 +289,7 @@ namespace Licenta_MediaPlayer
             RecordingFileName = "";
             string finalfilename = "";
             int trackBarMarker = Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture);
+            getRecordFolderFromXml();
 
             if (this.myVlcControl != null && !string.IsNullOrEmpty(MRL) && !string.IsNullOrEmpty(recordFolder))
             {
@@ -280,7 +299,7 @@ namespace Licenta_MediaPlayer
                     if (Directory.Exists(recordFolder))
                     { 
                         string data;
-                        try { data = ("-" + label_elapsed.Text + "-" + GetClock()).Replace(':', '-'); } catch { data = ""; }
+                        try { data = ("-" + start/60 + " " + start%60 + "-" + end/60 + " " + end%60 + "-" + GetClock()).Replace(':', '-'); } catch { data = ""; }
                         finalfilename = recordFolder + "\\" + "REC" + data + Path.GetExtension(currentlyPlayedFilePath);
                         lastRecordedFilePath = finalfilename;
 
@@ -292,10 +311,13 @@ namespace Licenta_MediaPlayer
                             engine.GetMetadata(inputFile);
 
                             var options = new ConversionOptions();
+                            new Thread(() =>
+                            {
+                                Thread.CurrentThread.IsBackground = true;
+                                options.CutMedia(TimeSpan.FromSeconds(start), TimeSpan.FromSeconds(end - start));
 
-                            options.CutMedia(TimeSpan.FromSeconds(start), TimeSpan.FromSeconds(end-start));
-
-                            engine.Convert(inputFile, outputFile, options);
+                                engine.Convert(inputFile, outputFile, options);
+                            }).Start();
                         }
                     }
 
@@ -357,13 +379,16 @@ namespace Licenta_MediaPlayer
         {
             panel1.Dock = DockStyle.Fill; // deoarece MouseEvent-urile sunt dezactivate in timp ce Vlccontrol reda media
                                           // folosesc un panou ce acopera tot vlccontrolul si are ca mouse event fullscreen pe 2xclick
-            //panel1.BackColor = System.Drawing.Color.Transparent;
+                                          //panel1.BackColor = System.Drawing.Color.Transparent;
+            button_play.Enabled = false;
+            button_stop.Enabled = false;
+            button_record.Enabled = false;
+
             myVlcControl.Controls.Add(panel1);
         }
 
         private void myVlcControl_Click_1(object sender, EventArgs e)
         {
-            
         }
 
         private void fullscreen()
@@ -527,6 +552,59 @@ namespace Licenta_MediaPlayer
                 button_stop.Enabled = true;
                 button_share.Enabled = true;
             }
+        }
+
+        void getRecordFolderFromXml()
+        {
+            try
+            {
+                if (File.Exists(settingsPath))
+                { // If XML file exists do...
+
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(settingsPath);
+
+                    // READ Settings:
+                    XmlNodeList nodesl = doc.SelectNodes("//settings");
+                    if (nodesl != null)
+                    {
+                        foreach (XmlElement no in nodesl)
+                        {
+                            if (no.GetAttribute("recordFolder") != null) { recordFolder = (no.GetAttribute("recordFolder")); };
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (String.IsNullOrEmpty(recordFolder)) { recordFolder = Application.StartupPath + @"\Recorded Videos"; };
+            }
+            catch { }
+        }
+
+        void createOptionsXml()
+        { // creez Options.xml cu valori default daca acesta nu exista
+            try
+            {
+                XmlDocument doc = new XmlDocument();
+                XmlNode headerNode = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+                doc.AppendChild(headerNode);
+
+                XmlNode rootNode = doc.CreateElement("root");
+                doc.AppendChild(rootNode);
+
+                XmlNode settNode = doc.CreateElement("settings");
+                rootNode.AppendChild(settNode);
+
+                XmlAttribute Attr1 = doc.CreateAttribute("recordFolder");
+                Attr1.Value = Application.StartupPath + @"\Recorded Videos"; ;
+                settNode.Attributes.Append(Attr1);
+
+                doc.Save(settingsPath);
+            }
+            catch { }
         }
     }
 

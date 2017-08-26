@@ -21,3 +21,4 @@ D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Licenta_Med
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Licenta_MediaPlayer.application
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.exe.manifest
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.application
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.OptionsWindow.resources
