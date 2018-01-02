@@ -10,6 +10,7 @@ using MediaToolkit;
 using MediaToolkit.Model;
 using MediaToolkit.Options;
 using MediaToolkit.Util;
+using System.Collections.Generic;
 
 namespace Licenta_MediaPlayer
 {
@@ -477,19 +478,28 @@ namespace Licenta_MediaPlayer
 
             if (result == DialogResult.Yes)
             {
+                
+
                 //...
-                if(lastRecordedFilePath!="")
+                if (lastRecordedFilePath != "")
                 {
-                    shareOnFacebook(lastRecordedFilePath);
+                    if (isValidFormat(lastRecordedFilePath))                      
+                        shareOnFacebook(lastRecordedFilePath);
+                    else
+                        MessageBox.Show("The chosen format cannot be uploaded. Only video formats can be used!");
                 }
                 else
                 {
                     DialogResult result2 = MessageBox.Show("There were no clips recorded in this session!\nDo you want to pick a previously recorded clip?", "", MessageBoxButtons.YesNo);
-                    if(result2 == DialogResult.Yes)
+                    if (result2 == DialogResult.Yes)
                     {
                         string fn = browseFileToUpload();
-                        if (fn!=null)
-                            shareOnFacebook(fn);
+                        if (fn != null)
+                        {
+                            if (isValidFormat(fn))
+                                shareOnFacebook(fn);
+                            else MessageBox.Show("The chosen format cannot be uploaded. Only video formats can be used!");
+                        }
                     }
                 }
             }
@@ -497,7 +507,12 @@ namespace Licenta_MediaPlayer
             {
                 string fn = browseFileToUpload();
                 if (fn != null)
-                    shareOnFacebook(fn);
+                    if (fn != null)
+                    {
+                        if (isValidFormat(fn))
+                            shareOnFacebook(fn);
+                        else MessageBox.Show("The chosen format cannot be uploaded. Only video formats can be used!");
+                    }
             }
             else// cod pt dialogresult.cancel
             {
@@ -605,6 +620,23 @@ namespace Licenta_MediaPlayer
                 doc.Save(settingsPath);
             }
             catch { }
+        }
+
+        bool isValidFormat(string fileName)
+        {
+            List<string> listExtensions = new List<string>()
+                {
+                    ".mp4",
+                    ".mkv",
+                    ".avi",
+                    ".3gp",
+                    ".mov",
+                    ".wmv"
+                };
+            if (listExtensions.Contains(fileName.Substring(fileName.Length - 4)))
+                return true;
+            else return false;
+
         }
     }
 
