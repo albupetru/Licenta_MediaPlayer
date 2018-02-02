@@ -24,7 +24,7 @@ namespace Licenta_MediaPlayer
         bool isFullscreen = false;
         bool isRecording = false;
         int recordStartPoint = 0;
-        string recordFolder = Application.StartupPath + @"\rec";
+        string recordFolder = Application.StartupPath + @"\Recorded Videos";
         string MRL = "";
         string RecordingFileName = "";
         string currentlyPlayedFilePath = "";
@@ -301,7 +301,7 @@ namespace Licenta_MediaPlayer
                     { 
                         string data;
                         try { data = ("-" + start/60 + " " + start%60 + "-" + end/60 + " " + end%60 + "-" + GetClock()).Replace(':', '-'); } catch { data = ""; }
-                        finalfilename = recordFolder + "\\" + "REC" + data + Path.GetExtension(currentlyPlayedFilePath);
+                        finalfilename = recordFolder + "\\" + Path.GetFileNameWithoutExtension(currentlyPlayedFilePath) + data + Path.GetExtension(currentlyPlayedFilePath);
                         lastRecordedFilePath = finalfilename;
 
                         var inputFile = new MediaFile { Filename = currentlyPlayedFilePath };

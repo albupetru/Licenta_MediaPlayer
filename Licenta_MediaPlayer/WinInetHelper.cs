@@ -40,10 +40,6 @@ namespace Licenta_MediaPlayer
 
         [DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern bool InternetSetOption(
-        int hInternet,
-        int dwOption,
-        IntPtr lpBuffer,
-        int dwBufferLength
-        );
+        int hInternet, int dwOption, IntPtr lpBuffer, int dwBufferLength);
     }
 }

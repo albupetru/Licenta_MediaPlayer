@@ -149,6 +149,7 @@
             this.Controls.Add(this.comboBox);
             this.Controls.Add(this.label_priv);
             this.Controls.Add(this.button_post);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FacebookPostForm";
             this.Text = "Post to Facebook";
