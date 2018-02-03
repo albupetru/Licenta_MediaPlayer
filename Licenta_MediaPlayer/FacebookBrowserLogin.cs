@@ -84,7 +84,6 @@ namespace Licenta_MediaPlayer
             }
             catch (Exception ex)
             {
-
                 throw;
             }
             finally

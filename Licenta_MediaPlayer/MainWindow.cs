@@ -23,14 +23,15 @@ namespace Licenta_MediaPlayer
         bool userIsPositioningTrackBar = false;
         bool isFullscreen = false;
         bool isRecording = false;
+        bool wasGifLast = false;
         int recordStartPoint = 0;
         string recordFolder = Application.StartupPath + @"\Recorded Videos";
         string MRL = "";
         string RecordingFileName = "";
         string currentlyPlayedFilePath = "";
         string lastRecordedFilePath = "";
+        string lastRecordedGifFilePath = "";
         string settingsPath = "";
-        string filePlayed = "";
 
         public MainWindow()
         {
@@ -191,7 +192,8 @@ namespace Licenta_MediaPlayer
             label_toElapse.Text = "00:00:00";
             if (isRecording)
             {
-                RecordMediaToolkit(recordStartPoint, Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture));
+                DialogResult dres = MessageBox.Show("Do you want your clip to saved as a gif?", "", MessageBoxButtons.YesNo);
+                RecordMediaToolkit(recordStartPoint, Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture), dres == DialogResult.Yes);
                 isRecording = false;
                 recordStartPoint = 0;
                 panelRec.Hide();
@@ -285,7 +287,7 @@ namespace Licenta_MediaPlayer
             //getMediaDuration();
         }
 
-        void RecordMediaToolkit(int start, int end)
+        void RecordMediaToolkit(int start, int end, bool gif)
         {
             RecordingFileName = "";
             string finalfilename = "";
@@ -317,6 +319,14 @@ namespace Licenta_MediaPlayer
                                 Thread.CurrentThread.IsBackground = true;
                                 options.CutMedia(TimeSpan.FromSeconds(start), TimeSpan.FromSeconds(end - start));
 
+                                // dupa ce s-a terminat taierea clipului se face un gif dintr-acesta
+                                if (gif)
+                                {
+                                    engine.ConversionCompleteEvent += gif_eventHelper;
+                                    wasGifLast = true;
+                                }
+                                else wasGifLast = false;
+
                                 engine.Convert(inputFile, outputFile, options);
                             }).Start();
                         }
@@ -340,14 +350,19 @@ namespace Licenta_MediaPlayer
             if (myVlcControl.IsPlaying)
                 if (isRecording)
                 {
-                    RecordMediaToolkit(recordStartPoint, Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture));
+                    myVlcControl.Pause();
+
+                    DialogResult dres = DialogResult.No;
+                    if(isValidFormat(currentlyPlayedFilePath))
+                        dres = MessageBox.Show("Do you want your clip to saved as a gif?", "", MessageBoxButtons.YesNo);
+                    RecordMediaToolkit(recordStartPoint, Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture), dres==DialogResult.Yes);
+
                     isRecording = false;
                     recordStartPoint = 0;
                     button_play.Enabled = true;
                     button_stop.Enabled = true;
                     button_share.Enabled = true;
                     panelRec.Hide();
-                    myVlcControl.Pause();
                     button_play.Text = "Play";
                     paused = true;
                 }
@@ -478,13 +493,14 @@ namespace Licenta_MediaPlayer
 
             if (result == DialogResult.Yes)
             {
-                
-
+                string usedFilePath = lastRecordedFilePath;
+                if (wasGifLast)
+                    usedFilePath = lastRecordedGifFilePath; 
                 //...
-                if (lastRecordedFilePath != "")
+                if (usedFilePath != "")
                 {
-                    if (isValidFormat(lastRecordedFilePath))                      
-                        shareOnFacebook(lastRecordedFilePath);
+                    if (isValidFormat(usedFilePath))                      
+                        shareOnFacebook(usedFilePath);
                     else
                         MessageBox.Show("The chosen format cannot be uploaded. Only video formats can be used!");
                 }
@@ -524,7 +540,8 @@ namespace Licenta_MediaPlayer
         {
             OpenFileDialog oDialog = new OpenFileDialog();
             //oDialog.Filter = ; 
-            oDialog.InitialDirectory = recordFolder;
+            oDialog.Filter = "Supported Formats(*.MP4; *.AVI; *.MKV; *.3GP; *.WMV; *.MOV; *.GIF)| *.MP4; *.AVI; *.MKV; *.3GP; *.WMV; *.MOV; *.GIF";
+                   oDialog.InitialDirectory = recordFolder;
             oDialog.Title = "Choose a file to share";
             if (oDialog.ShowDialog() == DialogResult.OK)
             {
@@ -559,7 +576,8 @@ namespace Licenta_MediaPlayer
             paused = true;
             if (isRecording)
             {
-                RecordMediaToolkit(recordStartPoint, Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture));
+                DialogResult dres = MessageBox.Show("Do you want your clip to saved as a gif?", "", MessageBoxButtons.YesNo);
+                RecordMediaToolkit(recordStartPoint, Convert.ToInt32(trackBarElapsed.Value, CultureInfo.CurrentCulture), dres == DialogResult.Yes);
                 isRecording = false;
                 recordStartPoint = 0;
                 panelRec.Hide();
@@ -631,12 +649,30 @@ namespace Licenta_MediaPlayer
                     ".avi",
                     ".3gp",
                     ".mov",
-                    ".wmv"
+                    ".wmv",
+                    //
+                    ".gif"
                 };
             if (listExtensions.Contains(fileName.Substring(fileName.Length - 4)))
                 return true;
             else return false;
 
+        }
+
+        string gifIt(string inpath)
+        {
+            string outpath = recordFolder + "\\" + Path.GetFileNameWithoutExtension(inpath) + ".gif";
+            using (var engine = new Engine())
+            {
+                //engine.CustomCommand("-i \"E:\\testjacket 19.mkv\" -vf scale=500:-1 -t 10 -r 30 -ss 00:00:14 C:\\image.gif"); // -i input -vf video filter scale - filtru scalare  t durata r fps ss start time
+                engine.CustomCommand("-i \"" + inpath + "\" -vf scale=500:-1 -r 30 -ss 00:00:00 \"" + outpath + "\"");
+            }
+            return outpath;
+        }
+
+        void gif_eventHelper(object sender, ConversionCompleteEventArgs e) // used to start making a gif after the source video has finished clipping
+        {
+            lastRecordedGifFilePath = gifIt(lastRecordedFilePath);
         }
     }
 
