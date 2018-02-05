@@ -6,11 +6,15 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Diagnostics;
 using MediaToolkit;
 using MediaToolkit.Model;
 using MediaToolkit.Options;
 using MediaToolkit.Util;
 using System.Collections.Generic;
+using Tweetinvi;
+using Tweetinvi.Models;
+
 
 namespace Licenta_MediaPlayer
 {
@@ -235,7 +239,7 @@ namespace Licenta_MediaPlayer
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OptionsWindow opW = new OptionsWindow();
+            OptionsWindow opW = new OptionsWindow(null, null);
             opW.ShowDialog();
         }
         
@@ -436,9 +440,59 @@ namespace Licenta_MediaPlayer
         }
 
 
-        private void button_fullscreen_Click(object sender, EventArgs e)
+        private void button_fullscreen_Click(object sender, EventArgs e) // de implementat cu pointeri de functii
         {
-            fullscreen();
+            //fullscreen();
+            Tuple<string, string, bool> authDataFromXml = getAuthDataFromXml();
+            if (authDataFromXml.Item3)
+            {
+                DialogResult result = MessageBox.Show("Do you want to share the last recorded file?\n(Tip: Choose No to share another clip!)", "Confirmation", MessageBoxButtons.YesNoCancel);
+
+                if (result == DialogResult.Yes)
+                {
+                    string usedFilePath = lastRecordedFilePath;
+                    if (wasGifLast)
+                        usedFilePath = lastRecordedGifFilePath;
+                    //...
+                    if (usedFilePath != "")
+                    {
+                        if (isValidFormat(usedFilePath))
+                            shareOnTwitter(usedFilePath, authDataFromXml.Item1, authDataFromXml.Item2);
+                        else
+                            MessageBox.Show("The chosen format cannot be uploaded. Only video formats can be used!");
+                    }
+                    else
+                    {
+                        DialogResult result2 = MessageBox.Show("There were no clips recorded in this session!\nDo you want to pick a previously recorded clip?", "", MessageBoxButtons.YesNo);
+                        if (result2 == DialogResult.Yes)
+                        {
+                            string fn = browseFileToUpload();
+                            if (fn != null)
+                            {
+                                if (isValidFormat(fn))
+                                    shareOnTwitter(fn, authDataFromXml.Item1, authDataFromXml.Item2);
+                                else MessageBox.Show("The chosen format cannot be uploaded. Only video formats can be used!");
+                            }
+                        }
+                    }
+                }
+                else if (result == DialogResult.No)
+                {
+                    string fn = browseFileToUpload();
+                    if (fn != null)
+                        if (fn != null)
+                        {
+                            if (isValidFormat(fn))
+                                shareOnTwitter(fn, authDataFromXml.Item1, authDataFromXml.Item2);
+                            else MessageBox.Show("The chosen format cannot be uploaded. Only video formats can be used!");
+                        }
+                }
+                else// cod pt dialogresult.cancel
+                {
+                    //...
+                }
+            }
+            else MessageBox.Show("There is no Twitter account linked to this application!\nGo to Tools->Options to link a Twitter account to SociaPlayer!");
         }
 
 
@@ -635,6 +689,18 @@ namespace Licenta_MediaPlayer
                 Attr1.Value = Application.StartupPath + @"\Recorded Videos"; ;
                 settNode.Attributes.Append(Attr1);
 
+                XmlAttribute Attr2 = doc.CreateAttribute("twitterLinked");
+                Attr2.Value = "False"; ;
+                settNode.Attributes.Append(Attr2);
+
+                XmlAttribute Attr3 = doc.CreateAttribute("userToken");
+                Attr3.Value = ""; ;
+                settNode.Attributes.Append(Attr3);
+
+                XmlAttribute Attr4 = doc.CreateAttribute("userSecret");
+                Attr4.Value = ""; ;
+                settNode.Attributes.Append(Attr4);
+
                 doc.Save(settingsPath);
             }
             catch { }
@@ -673,6 +739,82 @@ namespace Licenta_MediaPlayer
         void gif_eventHelper(object sender, ConversionCompleteEventArgs e) // used to start making a gif after the source video has finished clipping
         {
             lastRecordedGifFilePath = gifIt(lastRecordedFilePath);
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //shareOnTwitter();
+            TwitterPinWindow tpw = new TwitterPinWindow();
+            tpw.Show();
+        }
+
+        private void shareOnTwitter()
+        {
+            // Create a new set of credentials for the application.
+            var appCredentials = new TwitterCredentials("xr9OavmMSTkLpjPQ9SINZHgr5", "B4BlN8ngBk7Gnzhn247lVx8L9ITlKaYeHVFAMf7NjZeuvw4ko0");
+
+            // Init the authentication process and store the related `AuthenticationContext`.
+            var authenticationContext = AuthFlow.InitAuthentication(appCredentials);
+
+            // Go to the URL so that Twitter authenticates the user and gives him a PIN code.
+            Process.Start(authenticationContext.AuthorizationURL);
+
+            // Ask the user to enter the pin code given by Twitter
+            var pinCode = Console.ReadLine();
+
+            // With this pin code it is now possible to get the credentials back from Twitter
+            var userCredentials = AuthFlow.CreateCredentialsFromVerifierCode(pinCode, authenticationContext);
+
+            // Use the user credentials in your application
+            Auth.SetCredentials(userCredentials);
+        }
+
+        private void helpToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            //shareOnTwitter("");
+        }
+
+        private Tuple<string, string, bool> getAuthDataFromXml()
+        {
+            string utoken = string.Empty;
+            string usecret = string.Empty;
+            bool twitterLinked = false;
+            try
+            {
+                if (File.Exists(settingsPath))
+                { // If XML file exists do...
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(settingsPath);
+                    // READ Settings:
+                    XmlNodeList nodesl = doc.SelectNodes("//settings");
+                    if (nodesl != null)
+                    {
+                        foreach (XmlElement no in nodesl)
+                        {
+                            
+                            if (no.GetAttribute("userToken") != null) { utoken = (no.GetAttribute("userToken")); };
+                            if (no.GetAttribute("userSecret") != null) { usecret = (no.GetAttribute("userSecret")); };
+                            if(no.GetAttribute("twitterLinked") != null) { twitterLinked = Convert.ToBoolean(no.GetAttribute("twitterLinked")); };
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (String.IsNullOrEmpty(recordFolder)) { recordFolder = Application.StartupPath + @"\Recorded Videos"; };
+            }
+            catch { }
+
+            return Tuple.Create(utoken, usecret, twitterLinked);
+        }
+
+        private void shareOnTwitter(string filePath, string userToken, string userSecret)
+        {
+            bool isFPGif = (Path.GetExtension(filePath).ToLower() == ".gif");
+                TwitterPostForm tpf = new TwitterPostForm("xr9OavmMSTkLpjPQ9SINZHgr5", "B4BlN8ngBk7Gnzhn247lVx8L9ITlKaYeHVFAMf7NjZeuvw4ko0", userToken, userSecret, filePath, isFPGif);
+            tpf.Show();
         }
     }
 

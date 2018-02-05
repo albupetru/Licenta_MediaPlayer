@@ -14,12 +14,22 @@ namespace Licenta_MediaPlayer
 {
     public partial class OptionsWindow : Form
     {
-        string settingsPath = string.Empty;
+        string settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Options.xml");
         string recordFolder = string.Empty;
+        string userToken = string.Empty;
+        string userSecret = string.Empty;
+        bool twitterLinked = false;
 
-        public OptionsWindow()
+        public OptionsWindow(string uToken, string uSecret)
         {
             InitializeComponent();
+
+            if (!String.IsNullOrEmpty(uToken) && !String.IsNullOrEmpty(uSecret))
+            {
+                twitterLinked = true;
+                userSecret = uSecret; userToken = uToken;
+                Save_Settings_To_XML();
+            }
         }
 
         private void OptionsWindow_Load(object sender, EventArgs e)
@@ -46,6 +56,9 @@ namespace Licenta_MediaPlayer
                         foreach (XmlElement no in nodesl)
                         {
                             if (no.GetAttribute("recordFolder") != null) { recordFolder = (no.GetAttribute("recordFolder")); };
+                            if (no.GetAttribute("twitterLinked") != null) { twitterLinked = Convert.ToBoolean(no.GetAttribute("twitterLinked")); }
+                            if (no.GetAttribute("userToken") != null) { userToken = (no.GetAttribute("userToken")); }
+                            if (no.GetAttribute("userSecret") != null) { userSecret = (no.GetAttribute("userSecret")); }
                         }
                     }
                 }
@@ -57,6 +70,8 @@ namespace Licenta_MediaPlayer
                 if (String.IsNullOrEmpty(recordFolder)) { recordFolder = Application.StartupPath + @"\Recorded Videos"; };
                 textBoxSaveFolder.Text = recordFolder;
 
+                if (twitterLinked) checkBoxTwitterAccLink.Checked = true;
+                else checkBoxTwitterAccLink.Checked = false;
             }
             catch { }
         }
@@ -79,6 +94,19 @@ namespace Licenta_MediaPlayer
                 if (String.IsNullOrEmpty(recordFolder)) {recordFolder = Application.StartupPath + @"\Recorded Videos"; textBoxSaveFolder.Text = recordFolder; };
                 Attr1.Value = recordFolder;
                 settNode.Attributes.Append(Attr1);
+
+                XmlAttribute Attr2 = doc.CreateAttribute("twitterLinked");
+                //if (String.IsNullOrEmpty(twitterLinked)) { twitterLinked = false; checkBoxTwitterAccLink.Checked = false; };
+                Attr2.Value = Convert.ToString(twitterLinked);
+                settNode.Attributes.Append(Attr2);
+
+                XmlAttribute Attr3 = doc.CreateAttribute("userToken");
+                Attr3.Value = userToken;
+                settNode.Attributes.Append(Attr3);
+
+                XmlAttribute Attr4 = doc.CreateAttribute("userSecret");
+                Attr4.Value = userSecret;
+                settNode.Attributes.Append(Attr4);
 
                 doc.Save(settingsPath);
             }
@@ -104,6 +132,13 @@ namespace Licenta_MediaPlayer
         private void buttonSave_Click(object sender, EventArgs e)
         {
             Save_Settings_To_XML();
+            this.Close();
+        }
+
+        private void buttonTwitterAccSet_Click(object sender, EventArgs e)
+        {
+            TwitterPinWindow tpw = new TwitterPinWindow();
+            tpw.Show();
             this.Close();
         }
     }
