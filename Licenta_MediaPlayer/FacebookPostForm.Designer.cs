@@ -43,7 +43,7 @@
             // 
             // button_post
             // 
-            this.button_post.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.button_post.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(89)))), ((int)(((byte)(152)))));
             this.button_post.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_post.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.button_post.Location = new System.Drawing.Point(320, 265);
@@ -117,7 +117,7 @@
             // 
             // panelWait
             // 
-            this.panelWait.BackColor = System.Drawing.SystemColors.HotTrack;
+            this.panelWait.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(89)))), ((int)(((byte)(152)))));
             this.panelWait.Controls.Add(this.label1);
             this.panelWait.Location = new System.Drawing.Point(55, 75);
             this.panelWait.Name = "panelWait";

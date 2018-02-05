@@ -307,7 +307,7 @@ namespace Licenta_MediaPlayer
                     { 
                         string data;
                         try { data = ("-" + start/60 + " " + start%60 + "-" + end/60 + " " + end%60 + "-" + GetClock()).Replace(':', '-'); } catch { data = ""; }
-                        finalfilename = recordFolder + "\\" + Path.GetFileNameWithoutExtension(currentlyPlayedFilePath) + data + Path.GetExtension(currentlyPlayedFilePath);
+                        finalfilename = recordFolder + "\\" + Path.GetFileNameWithoutExtension(currentlyPlayedFilePath) + data + ".mp4"; //Path.GetExtension(currentlyPlayedFilePath);
                         lastRecordedFilePath = finalfilename;
 
                         var inputFile = new MediaFile { Filename = currentlyPlayedFilePath };
@@ -329,7 +329,11 @@ namespace Licenta_MediaPlayer
                                     engine.ConversionCompleteEvent += gif_eventHelper;
                                     wasGifLast = true;
                                 }
-                                else wasGifLast = false;
+                                else
+                                {
+                                    wasGifLast = false;
+                                    engine.ConversionCompleteEvent += vid_eventHelper;
+                                }
 
                                 engine.Convert(inputFile, outputFile, options);
                             }).Start();
@@ -739,6 +743,12 @@ namespace Licenta_MediaPlayer
         void gif_eventHelper(object sender, ConversionCompleteEventArgs e) // used to start making a gif after the source video has finished clipping
         {
             lastRecordedGifFilePath = gifIt(lastRecordedFilePath);
+            MessageBox.Show("Video clipped succesfully!");
+        }
+
+        void vid_eventHelper(object sender, ConversionCompleteEventArgs e)
+        {
+            MessageBox.Show("Video clipped succesfully!");
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
