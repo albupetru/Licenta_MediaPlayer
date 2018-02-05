@@ -307,7 +307,9 @@ namespace Licenta_MediaPlayer
                     { 
                         string data;
                         try { data = ("-" + start/60 + " " + start%60 + "-" + end/60 + " " + end%60 + "-" + GetClock()).Replace(':', '-'); } catch { data = ""; }
-                        finalfilename = recordFolder + "\\" + Path.GetFileNameWithoutExtension(currentlyPlayedFilePath) + data + ".mp4"; //Path.GetExtension(currentlyPlayedFilePath);
+                        if(isValidFormat(currentlyPlayedFilePath))
+                            finalfilename = recordFolder + "\\" + Path.GetFileNameWithoutExtension(currentlyPlayedFilePath) + data + ".mp4"; //Path.GetExtension(currentlyPlayedFilePath);
+                        else finalfilename = recordFolder + "\\" + Path.GetFileNameWithoutExtension(currentlyPlayedFilePath) + data + Path.GetExtension(currentlyPlayedFilePath);
                         lastRecordedFilePath = finalfilename;
 
                         var inputFile = new MediaFile { Filename = currentlyPlayedFilePath };

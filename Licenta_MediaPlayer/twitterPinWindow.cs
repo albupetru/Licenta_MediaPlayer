@@ -52,7 +52,7 @@ namespace Licenta_MediaPlayer
                 {
                     startAuth();
                     Thread.Sleep(1000); // ca sa apara messageboxu peste browser
-                    MessageBox.Show("PIN invalid! Incercati din nou!");
+                    MessageBox.Show("Invalid PIN! Try again!");
                 }
                 //catch { /*tratat alte exceptii*/}              
 
