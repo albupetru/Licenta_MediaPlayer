@@ -44,8 +44,8 @@ namespace Licenta_MediaPlayer
             //new Thread(() =>// s-ar putea sa nu fie necesar thread
             {
                 //Thread.CurrentThread.IsBackground = true;
-                panelWait.BringToFront(); label1.BringToFront(); label1.Visible = true;
-                panelWait.Visible = true; 
+                panelWait.BringToFront(); label1.BringToFront();
+                panelWait.Visible = true; label1.Visible = true;
                 // Use the user credentials in your application
                 Auth.SetUserCredentials(consumerKey, consumerSecret, userToken, userSecret);
 

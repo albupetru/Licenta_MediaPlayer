@@ -743,9 +743,7 @@ namespace Licenta_MediaPlayer
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //shareOnTwitter();
-            TwitterPinWindow tpw = new TwitterPinWindow();
-            tpw.Show();
+
         }
 
         private void shareOnTwitter()

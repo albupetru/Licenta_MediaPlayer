@@ -151,14 +151,14 @@
             // helpToolStripMenuItem1
             // 
             this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
-            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
             this.helpToolStripMenuItem1.Text = "Help";
             this.helpToolStripMenuItem1.Click += new System.EventHandler(this.helpToolStripMenuItem1_Click);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -280,26 +280,29 @@
             // button_share
             // 
             this.button_share.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button_share.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_share.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.button_share.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(89)))), ((int)(((byte)(152)))));
+            this.button_share.Font = new System.Drawing.Font("Segoe UI", 6.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_share.ForeColor = System.Drawing.Color.White;
             this.button_share.Location = new System.Drawing.Point(362, 25);
             this.button_share.Name = "button_share";
             this.button_share.Size = new System.Drawing.Size(60, 30);
             this.button_share.TabIndex = 17;
-            this.button_share.Text = "Share";
-            this.button_share.UseVisualStyleBackColor = true;
+            this.button_share.Text = "facebook";
+            this.button_share.UseVisualStyleBackColor = false;
             this.button_share.Click += new System.EventHandler(this.button_share_Click);
             // 
             // button_fullscreen
             // 
             this.button_fullscreen.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button_fullscreen.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_fullscreen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(29)))), ((int)(((byte)(161)))), ((int)(((byte)(242)))));
+            this.button_fullscreen.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_fullscreen.ForeColor = System.Drawing.Color.White;
             this.button_fullscreen.Location = new System.Drawing.Point(428, 25);
             this.button_fullscreen.Name = "button_fullscreen";
             this.button_fullscreen.Size = new System.Drawing.Size(60, 30);
             this.button_fullscreen.TabIndex = 18;
-            this.button_fullscreen.Text = "Fullscr";
-            this.button_fullscreen.UseVisualStyleBackColor = true;
+            this.button_fullscreen.Text = "Twitter";
+            this.button_fullscreen.UseVisualStyleBackColor = false;
             this.button_fullscreen.Click += new System.EventHandler(this.button_fullscreen_Click);
             // 
             // panel1
