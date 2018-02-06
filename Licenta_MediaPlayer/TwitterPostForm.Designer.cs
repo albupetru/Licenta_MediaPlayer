@@ -98,6 +98,7 @@
             this.Controls.Add(this.label_desc);
             this.Controls.Add(this.richTextBoxDesc);
             this.Controls.Add(this.button_post);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "TwitterPostForm";
             this.Text = "SociaPlayer";

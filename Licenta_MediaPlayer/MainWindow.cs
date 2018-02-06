@@ -372,6 +372,7 @@ namespace Licenta_MediaPlayer
                     button_play.Enabled = true;
                     button_stop.Enabled = true;
                     button_share.Enabled = true;
+                    button_fullscreen.Enabled = true;
                     panelRec.Hide();
                     button_play.Text = "Play";
                     paused = true;
@@ -383,6 +384,7 @@ namespace Licenta_MediaPlayer
                     button_play.Enabled = false;
                     button_stop.Enabled = false;
                     button_share.Enabled = false;
+                    button_fullscreen.Enabled = false;
                     panelRec.Show();
                 }
         }
@@ -472,7 +474,7 @@ namespace Licenta_MediaPlayer
                         DialogResult result2 = MessageBox.Show("There were no clips recorded in this session!\nDo you want to pick a previously recorded clip?", "", MessageBoxButtons.YesNo);
                         if (result2 == DialogResult.Yes)
                         {
-                            string fn = browseFileToUpload();
+                            string fn = browseFileToUpload(true);
                             if (fn != null)
                             {
                                 if (isValidFormat(fn))
@@ -484,7 +486,7 @@ namespace Licenta_MediaPlayer
                 }
                 else if (result == DialogResult.No)
                 {
-                    string fn = browseFileToUpload();
+                    string fn = browseFileToUpload(true);
                     if (fn != null)
                         if (fn != null)
                         {
@@ -569,7 +571,7 @@ namespace Licenta_MediaPlayer
                     DialogResult result2 = MessageBox.Show("There were no clips recorded in this session!\nDo you want to pick a previously recorded clip?", "", MessageBoxButtons.YesNo);
                     if (result2 == DialogResult.Yes)
                     {
-                        string fn = browseFileToUpload();
+                        string fn = browseFileToUpload(false);
                         if (fn != null)
                         {
                             if (isValidFormat(fn))
@@ -581,7 +583,7 @@ namespace Licenta_MediaPlayer
             }
             else if (result == DialogResult.No)
             {
-                string fn = browseFileToUpload();
+                string fn = browseFileToUpload(false);
                 if (fn != null)
                     if (fn != null)
                     {
@@ -596,12 +598,12 @@ namespace Licenta_MediaPlayer
             }
         }
 
-        private string browseFileToUpload()
+        private string browseFileToUpload(bool onTwitter)
         {
             OpenFileDialog oDialog = new OpenFileDialog();
-            //oDialog.Filter = ; 
-            oDialog.Filter = "Supported Formats(*.MP4; *.AVI; *.MKV; *.3GP; *.WMV; *.MOV; *.GIF)| *.MP4; *.AVI; *.MKV; *.3GP; *.WMV; *.MOV; *.GIF";
-                   oDialog.InitialDirectory = recordFolder;
+            if(onTwitter) oDialog.Filter = "Supported Formats(*.MP4; *.GIF)| *.MP4; *.GIF";
+            else oDialog.Filter = "Supported Formats(*.MP4; *.AVI; *.MKV; *.3GP; *.WMV; *.MOV; *.GIF)| *.MP4; *.AVI; *.MKV; *.3GP; *.WMV; *.MOV; *.GIF";
+            oDialog.InitialDirectory = recordFolder;
             oDialog.Title = "Choose a file to share";
             if (oDialog.ShowDialog() == DialogResult.OK)
             {
@@ -755,33 +757,13 @@ namespace Licenta_MediaPlayer
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void shareOnTwitter()
-        {
-            // Create a new set of credentials for the application.
-            var appCredentials = new TwitterCredentials("xr9OavmMSTkLpjPQ9SINZHgr5", "B4BlN8ngBk7Gnzhn247lVx8L9ITlKaYeHVFAMf7NjZeuvw4ko0");
-
-            // Init the authentication process and store the related `AuthenticationContext`.
-            var authenticationContext = AuthFlow.InitAuthentication(appCredentials);
-
-            // Go to the URL so that Twitter authenticates the user and gives him a PIN code.
-            Process.Start(authenticationContext.AuthorizationURL);
-
-            // Ask the user to enter the pin code given by Twitter
-            var pinCode = Console.ReadLine();
-
-            // With this pin code it is now possible to get the credentials back from Twitter
-            var userCredentials = AuthFlow.CreateCredentialsFromVerifierCode(pinCode, authenticationContext);
-
-            // Use the user credentials in your application
-            Auth.SetCredentials(userCredentials);
+            AboutForm af = new AboutForm();
+            af.Show();
         }
 
         private void helpToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            //shareOnTwitter("");
+            Process.Start("https://github.com/albupetru/Licenta_MediaPlayer/wiki");
         }
 
         private Tuple<string, string, bool> getAuthDataFromXml()

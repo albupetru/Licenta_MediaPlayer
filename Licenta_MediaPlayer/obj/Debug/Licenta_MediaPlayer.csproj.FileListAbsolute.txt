@@ -49,3 +49,4 @@ D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Nito.AsyncE
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Nito.Disposables.xml
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.twitterPinWindow.resources
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.TwitterPostForm.resources
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.AboutForm.resources

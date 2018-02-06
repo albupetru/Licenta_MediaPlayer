@@ -51,31 +51,6 @@ namespace Licenta_MediaPlayer
 
                 var video1 = System.IO.File.ReadAllBytes(filePath);
 
-                /*var chunk = Upload.CreateChunkedUploader(); //Create an instance of the ChunkedUploader class (I believe this is the only way to get this object)
-
-                using (FileStream fs = System.IO.File.OpenRead(path))
-                {
-                        chunk.Init("video/mp4",(int)fs.Length); //Important! When initialized correctly, your "chunk" object will now have a type long "MediaId"
-                        byte[] buffer = new byte[video1.Length]; //Your chunk MUST be 5MB or less or else the Append function will fail silently.
-                         int bytesRead = 0;
-
-                         while ((bytesRead = fs.Read(buffer, 0, buffer.Length)) > 0)
-                         {
-                             byte[] copy = new byte[bytesRead];
-                             Buffer.BlockCopy(buffer, 0, copy, 0, bytesRead);
-                             TimeSpan s = new TimeSpan();
-
-                             chunk.Append(copy, chunk.NextSegmentIndex.ToString()); //The library says the NextSegment Parameter is optional, however I wasn't able to get it to work if I left it out. 
-                         }
-                     }
-                     var media = chunk.Complete();*/
-
-
-                //panelWait.InvokeIfRequired(t => t.BringToFront());
-                //label1.InvokeIfRequired(t => t.BringToFront());
-                //panelWait.InvokeIfRequired(t => t.Visible = true);
-                //label1.InvokeIfRequired(t => t.Visible = true);
-
                 string mediaCategory = "tweet_video";
                 if (isGif)
                     mediaCategory = "tweet_gif";
@@ -88,8 +63,7 @@ namespace Licenta_MediaPlayer
                     MessageBox.Show("nimic fraiere!");
                     return;
                 }*/
-
-               
+              
                 Upload.WaitForMediaProcessingToGetAllMetadata(media);
 
                 string tweetText="";

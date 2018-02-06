@@ -89,13 +89,18 @@ namespace Licenta_MediaPlayer
             {
                 Thread.CurrentThread.IsBackground = true;
                 dynamic result = fb.Post("/me/videos", parameters); // HANDLE THE ERRORS!!!!
+                MessageBox.Show("Video has been added to timeline!");
             }).Start();
             //MessageBox.Show("wait");
             
             //wt.Close();
             panelWait.Hide();
             panelWait.SendToBack();
-            MessageBox.Show("Video has been added to timeline!");
+            //new Thread(() =>
+            //{
+                //Thread.Sleep(2000);
+                //MessageBox.Show("Video has been added to timeline!");
+            //}).Start();
             this.Close();
         }
     }
