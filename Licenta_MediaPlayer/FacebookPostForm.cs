@@ -83,8 +83,9 @@ namespace Licenta_MediaPlayer
 
             //WaitForm wt = new WaitForm();
             //wt.Show();
-            panelWait.Show();
-            panelWait.BringToFront();
+            /*panelWait.Show(); label1.Show();
+            panelWait.BringToFront(); label1.BringToFront();*/
+            Thread.Sleep(200);
             new Thread(() =>
             {
                 Thread.CurrentThread.IsBackground = true;
@@ -93,7 +94,6 @@ namespace Licenta_MediaPlayer
             }).Start();
             //MessageBox.Show("wait");
             
-            //wt.Close();
             panelWait.Hide();
             panelWait.SendToBack();
             //new Thread(() =>
