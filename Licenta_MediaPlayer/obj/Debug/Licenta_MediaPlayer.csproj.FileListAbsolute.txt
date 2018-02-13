@@ -1,6 +1,3 @@
-D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Licenta_MediaPlayer.exe.config
-D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Licenta_MediaPlayer.exe
-D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Licenta_MediaPlayer.pdb
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Vlc.DotNet.Core.dll
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Vlc.DotNet.Core.Interops.dll
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Vlc.DotNet.Forms.dll
@@ -8,8 +5,6 @@ D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Vlc.DotNet.
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.csprojResolveAssemblyReference.cache
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.Properties.Resources.resources
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.csproj.GenerateResource.Cache
-D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.exe
-D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.pdb
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.MainWindow.resources
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Facebook.dll
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Facebook.xml
@@ -17,10 +12,6 @@ D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\MediaToolki
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.FacebookBrowserLogin.resources
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.FacebookPostForm.resources
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.WaitForm.resources
-D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Licenta_MediaPlayer.exe.manifest
-D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Licenta_MediaPlayer.application
-D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.exe.manifest
-D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.application
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.OptionsWindow.resources
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Newtonsoft.Json.dll
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Newtonsoft.Json.xml
@@ -50,3 +41,12 @@ D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\Nito.Dispos
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.twitterPinWindow.resources
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.TwitterPostForm.resources
 D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\Licenta_MediaPlayer.AboutForm.resources
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\SociaPlayer.exe.config
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\SociaPlayer.exe.manifest
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\SociaPlayer.application
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\SociaPlayer.exe
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\obj\Debug\SociaPlayer.pdb
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\SociaPlayer.exe.manifest
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\SociaPlayer.application
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\SociaPlayer.exe
+D:\programe visual\Licenta_MediaPlayer\Licenta_MediaPlayer\bin\Debug\SociaPlayer.pdb

@@ -83,6 +83,7 @@ namespace Licenta_MediaPlayer
                 paused = true;
                 button_play.Text = "Play";
             }
+            this.Focus();
         }
         private void button_play_Click(object sender, EventArgs e)
         {
@@ -445,6 +446,7 @@ namespace Licenta_MediaPlayer
                 panelBottom.Visible = false;
                 isFullscreen = true;
             }
+            this.Focus();
         }
 
 
@@ -546,6 +548,7 @@ namespace Licenta_MediaPlayer
             {
                 panelBottom.Visible = !panelBottom.Visible;
                 menuStrip1.Visible = !menuStrip1.Visible;
+                this.Focus();
             }
         }
 
